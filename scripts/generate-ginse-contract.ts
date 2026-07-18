@@ -32,7 +32,7 @@ const inputSchema = {
 };
 
 const outputSchema = {
-  ...z.toJSONSchema(campaignOutputSchema),
+  ...z.toJSONSchema(campaignOutputSchema, { reused: "ref" }),
   title: "Buyable acquisition conviction list",
   description:
     "A market funnel, ten explainable conviction targets and a complete acquisition Deal Pack for the top business.",
