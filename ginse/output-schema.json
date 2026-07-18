@@ -1,0 +1,393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaign_id": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "disclosure": {
+      "type": "string",
+      "const": "Synthetic hackathon demonstration data"
+    },
+    "thesis_summary": {
+      "type": "string"
+    },
+    "targets": {
+      "minItems": 10,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string",
+            "enum": [
+              "hvac",
+              "plumbing",
+              "commercial_cleaning",
+              "industrial_maintenance"
+            ]
+          },
+          "city": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "founded_year": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "employee_estimate": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "qualification_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "score_breakdown": {
+            "type": "object",
+            "properties": {
+              "thesis_fit": {
+                "type": "number"
+              },
+              "economic_attractiveness": {
+                "type": "number"
+              },
+              "evidence_quality": {
+                "type": "number"
+              },
+              "succession_signals": {
+                "type": "number"
+              },
+              "contactability": {
+                "type": "number"
+              },
+              "data_completeness": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "thesis_fit",
+              "economic_attractiveness",
+              "evidence_quality",
+              "succession_signals",
+              "contactability",
+              "data_completeness"
+            ],
+            "additionalProperties": false
+          },
+          "estimated_financials": {
+            "type": "object",
+            "properties": {
+              "revenue_eur": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "ebitda_eur": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "ebitda_margin": {
+                "type": "number"
+              },
+              "recurring_revenue_ratio": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "revenue_eur",
+              "ebitda_eur",
+              "ebitda_margin",
+              "recurring_revenue_ratio"
+            ],
+            "additionalProperties": false
+          },
+          "valuation_range_eur": {
+            "type": "object",
+            "properties": {
+              "low": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "high": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "methodology": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "low",
+              "high",
+              "methodology"
+            ],
+            "additionalProperties": false
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "registry",
+                    "website",
+                    "reviews",
+                    "hiring",
+                    "operations",
+                    "commercial"
+                  ]
+                },
+                "label": {
+                  "type": "string"
+                },
+                "detail": {
+                  "type": "string"
+                },
+                "observed_at": {
+                  "type": "string"
+                },
+                "strength": {
+                  "type": "string",
+                  "enum": [
+                    "strong",
+                    "medium",
+                    "weak"
+                  ]
+                },
+                "source": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "type",
+                "label",
+                "detail",
+                "observed_at",
+                "strength",
+                "source"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "inferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unknowns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "why_it_fits": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "contact_path": {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "business_email",
+                  "business_phone",
+                  "contact_form"
+                ]
+              },
+              "value": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "channel",
+              "value",
+              "note"
+            ],
+            "additionalProperties": false
+          },
+          "next_action": {
+            "type": "string"
+          },
+          "listed_for_sale": {
+            "type": "boolean",
+            "const": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "sector",
+          "city",
+          "department",
+          "latitude",
+          "longitude",
+          "founded_year",
+          "employee_estimate",
+          "qualification_score",
+          "confidence",
+          "score_breakdown",
+          "estimated_financials",
+          "valuation_range_eur",
+          "evidence",
+          "inferences",
+          "unknowns",
+          "why_it_fits",
+          "contact_path",
+          "next_action",
+          "listed_for_sale"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "top_target_id": {
+      "type": "string"
+    },
+    "financing_snapshot": {
+      "type": "object",
+      "properties": {
+        "target_id": {
+          "type": "string"
+        },
+        "midpoint_valuation_eur": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "buyer_cash_eur": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "senior_debt_eur": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "seller_note_eur": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "annual_debt_service_eur": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "estimated_dscr": {
+          "type": "number"
+        },
+        "assumption": {
+          "type": "string"
+        },
+        "disclaimer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_id",
+        "midpoint_valuation_eur",
+        "buyer_cash_eur",
+        "senior_debt_eur",
+        "seller_note_eur",
+        "annual_debt_service_eur",
+        "estimated_dscr",
+        "assumption",
+        "disclaimer"
+      ],
+      "additionalProperties": false
+    },
+    "outreach_packet": {
+      "type": "object",
+      "properties": {
+        "target_id": {
+          "type": "string"
+        },
+        "email_subject": {
+          "type": "string"
+        },
+        "email_body": {
+          "type": "string"
+        },
+        "call_opener": {
+          "type": "string"
+        },
+        "diligence_questions": {
+          "minItems": 5,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "target_id",
+        "email_subject",
+        "email_body",
+        "call_opener",
+        "diligence_questions"
+      ],
+      "additionalProperties": false
+    },
+    "campaign_url": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "campaign_id",
+    "generated_at",
+    "disclosure",
+    "thesis_summary",
+    "targets",
+    "top_target_id",
+    "financing_snapshot",
+    "outreach_packet",
+    "campaign_url"
+  ],
+  "additionalProperties": false,
+  "title": "Buyable qualified target pipeline",
+  "description": "Ten ranked synthetic off-market targets plus top-target financing and outreach preparation."
+}

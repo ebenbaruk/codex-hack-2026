@@ -1,0 +1,13 @@
+{
+  "region": "Auvergne-Rhône-Alpes",
+  "sectors": [
+    "hvac",
+    "plumbing"
+  ],
+  "cash_available_eur": 250000,
+  "revenue_range_eur": {
+    "min": 750000,
+    "max": 4000000
+  },
+  "buyer_profile": "Hands-on operator seeking a recurring-revenue local service business"
+}

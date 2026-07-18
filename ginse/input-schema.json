@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Buyable acquisition thesis",
+  "description": "A France local-services acquisition thesis for an evidence-backed synthetic target search.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "region",
+    "sectors",
+    "cash_available_eur",
+    "revenue_range_eur",
+    "buyer_profile"
+  ],
+  "properties": {
+    "region": {
+      "type": "string",
+      "const": "Auvergne-Rhône-Alpes"
+    },
+    "sectors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "string",
+        "enum": [
+          "hvac",
+          "plumbing",
+          "commercial_cleaning",
+          "industrial_maintenance"
+        ]
+      }
+    },
+    "cash_available_eur": {
+      "type": "integer",
+      "minimum": 50000,
+      "maximum": 2000000
+    },
+    "revenue_range_eur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 250000,
+          "maximum": 10000000
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 500000,
+          "maximum": 20000000
+        }
+      }
+    },
+    "buyer_profile": {
+      "type": "string",
+      "minLength": 12,
+      "maxLength": 300
+    }
+  }
+}
