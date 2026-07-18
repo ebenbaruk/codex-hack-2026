@@ -1,0 +1,1 @@
+{"type":"object","properties":{"source":{"type":"string"},"disclaimer":{"type":"string"},"companies":{"type":"array","items":{"type":"object"}}}}
