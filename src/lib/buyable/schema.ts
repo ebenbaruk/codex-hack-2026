@@ -352,7 +352,6 @@ export const inputJsonSchema = {
       type: "array",
       minItems: 1,
       maxItems: 10,
-      uniqueItems: true,
       items: { type: "string", enum: sectors },
     },
     cash_available_eur: {
@@ -382,13 +381,11 @@ export const inputJsonSchema = {
     },
     preferred_signals: {
       type: "array",
-      uniqueItems: true,
       maxItems: acquisitionSignals.length,
       items: { type: "string", enum: acquisitionSignals },
     },
     avoid_signals: {
       type: "array",
-      uniqueItems: true,
       maxItems: 3,
       items: {
         type: "string",
