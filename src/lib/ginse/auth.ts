@@ -40,11 +40,7 @@ export async function verifyGinseInvocation(
     }
 
     const issuer = process.env.GINSE_ISSUER || undefined;
-    const audience =
-      process.env.GINSE_AUDIENCE ||
-      (process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/run`
-        : undefined);
+    const audience = process.env.GINSE_AUDIENCE || undefined;
 
     const result = await jwtVerify(token, getJwks(), {
       algorithms: ["EdDSA"],
@@ -70,4 +66,3 @@ export async function verifyGinseInvocation(
     throw new GinseAuthorizationError("Invalid or expired Ginse bearer token");
   }
 }
-
