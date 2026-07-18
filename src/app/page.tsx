@@ -245,7 +245,8 @@ export default function Home() {
                 the best recurring-revenue HVAC and plumbing businesses around
                 Lyon that I could acquire with €250,000. Rank the top 10,
                 explain why #1 wins, stress-test the financing and tell me what
-                I should verify first.”
+                I should verify first. Finish by showing me the returned
+                acquisition dashboard.”
               </p>
               <div className="grid border-t border-border sm:grid-cols-3">
                 {[

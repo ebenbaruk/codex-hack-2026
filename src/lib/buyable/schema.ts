@@ -258,6 +258,58 @@ const topAcquisitionCaseSchema = z
 export const campaignOutputSchema = z
   .object({
     schema_version: z.literal("2"),
+    dashboard: z
+      .object({
+        url: z.string().url(),
+        title: z.string(),
+        status: z.literal("ready"),
+        contains: z.array(z.string()).min(4),
+        call_to_action: z.string(),
+      })
+      .strict(),
+    campaign_url: z.string().url(),
+    codex_response: z
+      .object({
+        executive_summary: z.string().min(100),
+        answer_markdown: z.string().min(200),
+        top_targets: z
+          .array(
+            z
+              .object({
+                rank: z.number().int().min(1).max(3),
+                id: z.string(),
+                name: z.string(),
+                city: z.string(),
+                sector: z.string(),
+                conviction_score: z.number().int().min(0).max(100),
+                confidence: z.number().int().min(0).max(100),
+                revenue_eur: z.number().int(),
+                ebitda_eur: z.number().int(),
+                valuation_midpoint_eur: z.number().int(),
+                estimated_dscr: z.number(),
+                why_it_ranks: z.string(),
+              })
+              .strict(),
+          )
+          .length(3),
+        financing_summary: z
+          .object({
+            target_name: z.string(),
+            valuation_midpoint_eur: z.number().int(),
+            buyer_cash_eur: z.number().int(),
+            senior_debt_eur: z.number().int(),
+            seller_note_eur: z.number().int(),
+            earnout_eur: z.number().int(),
+            estimated_dscr: z.number(),
+            equity_gap_eur: z.number().int(),
+          })
+          .strict(),
+        critical_unknowns: z.array(z.string()).min(3).max(8),
+        key_takeaways: z.array(z.string()).min(3).max(6),
+        recommended_next_actions: z.array(z.string()).min(3).max(6),
+        suggested_follow_up_prompts: z.array(z.string()).length(3),
+      })
+      .strict(),
     campaign_id: z.string(),
     generated_at: z.string(),
     disclosure: z.literal("Synthetic hackathon demonstration data"),
@@ -283,7 +335,6 @@ export const campaignOutputSchema = z
         .strict(),
     ),
     targets: z.array(targetSchema).length(10),
-    conviction_targets: z.array(targetSchema).length(10),
     top_target_id: z.string(),
     ranking_explanation: z
       .object({
@@ -332,15 +383,6 @@ export const campaignOutputSchema = z
           .strict(),
       )
       .length(7),
-    codex_response: z
-      .object({
-        answer_markdown: z.string().min(200),
-        key_takeaways: z.array(z.string()).min(3).max(6),
-        recommended_next_actions: z.array(z.string()).min(3).max(6),
-        suggested_follow_up_prompts: z.array(z.string()).length(3),
-      })
-      .strict(),
-    campaign_url: z.string().url(),
   })
   .strict();
 

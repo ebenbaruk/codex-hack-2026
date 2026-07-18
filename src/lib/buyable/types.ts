@@ -307,14 +307,51 @@ export type GeneratedArtifact = {
 };
 
 export type CodexResponse = {
+  executive_summary: string;
   answer_markdown: string;
+  top_targets: Array<{
+    rank: number;
+    id: string;
+    name: string;
+    city: string;
+    sector: string;
+    conviction_score: number;
+    confidence: number;
+    revenue_eur: number;
+    ebitda_eur: number;
+    valuation_midpoint_eur: number;
+    estimated_dscr: number;
+    why_it_ranks: string;
+  }>;
+  financing_summary: {
+    target_name: string;
+    valuation_midpoint_eur: number;
+    buyer_cash_eur: number;
+    senior_debt_eur: number;
+    seller_note_eur: number;
+    earnout_eur: number;
+    estimated_dscr: number;
+    equity_gap_eur: number;
+  };
+  critical_unknowns: string[];
   key_takeaways: string[];
   recommended_next_actions: string[];
   suggested_follow_up_prompts: string[];
 };
 
+export type DashboardDeliverable = {
+  url: string;
+  title: string;
+  status: "ready";
+  contains: string[];
+  call_to_action: string;
+};
+
 export type CampaignOutput = {
   schema_version: "2";
+  dashboard: DashboardDeliverable;
+  campaign_url: string;
+  codex_response: CodexResponse;
   campaign_id: string;
   generated_at: string;
   disclosure: typeof DISCLOSURE;
@@ -323,7 +360,6 @@ export type CampaignOutput = {
   market_funnel: MarketFunnel;
   rejection_reasons: RejectionReason[];
   targets: QualifiedTarget[];
-  conviction_targets: QualifiedTarget[];
   top_target_id: string;
   ranking_explanation: {
     headline: string;
@@ -336,6 +372,4 @@ export type CampaignOutput = {
   offer_scenarios: OfferScenario[];
   outreach_packet: OutreachPacket;
   generated_artifacts: GeneratedArtifact[];
-  codex_response: CodexResponse;
-  campaign_url: string;
 };

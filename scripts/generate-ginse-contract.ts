@@ -135,6 +135,9 @@ const outputSchema = {
     "A market funnel, ten explainable conviction targets and a complete acquisition Deal Pack for the top business.",
   required: [
     "schema_version",
+    "dashboard",
+    "campaign_url",
+    "codex_response",
     "campaign_id",
     "generated_at",
     "disclosure",
@@ -143,7 +146,6 @@ const outputSchema = {
     "market_funnel",
     "rejection_reasons",
     "targets",
-    "conviction_targets",
     "top_target_id",
     "ranking_explanation",
     "top_acquisition_case",
@@ -151,11 +153,125 @@ const outputSchema = {
     "offer_scenarios",
     "outreach_packet",
     "generated_artifacts",
-    "codex_response",
-    "campaign_url",
   ],
   properties: {
     schema_version: { type: "string", const: "2" },
+    dashboard: {
+      type: "object",
+      description:
+        "The ready-to-open primary deliverable. Agents should surface this URL to the user.",
+      required: ["url", "title", "status", "contains", "call_to_action"],
+      properties: {
+        url: { type: "string", format: "uri" },
+        title: { type: "string" },
+        status: { type: "string", const: "ready" },
+        contains: stringArray,
+        call_to_action: { type: "string" },
+      },
+    },
+    campaign_url: { type: "string", format: "uri" },
+    codex_response: {
+      type: "object",
+      description:
+        "A concise, ready-to-display answer for Codex, followed by useful next actions and follow-up prompts.",
+      required: [
+        "executive_summary",
+        "answer_markdown",
+        "top_targets",
+        "financing_summary",
+        "critical_unknowns",
+        "key_takeaways",
+        "recommended_next_actions",
+        "suggested_follow_up_prompts",
+      ],
+      properties: {
+        executive_summary: { type: "string", minLength: 100 },
+        answer_markdown: { type: "string", minLength: 200 },
+        top_targets: {
+          type: "array",
+          minItems: 3,
+          maxItems: 3,
+          items: {
+            type: "object",
+            required: [
+              "rank",
+              "id",
+              "name",
+              "city",
+              "sector",
+              "conviction_score",
+              "confidence",
+              "revenue_eur",
+              "ebitda_eur",
+              "valuation_midpoint_eur",
+              "estimated_dscr",
+              "why_it_ranks",
+            ],
+            properties: {
+              rank: { type: "integer" },
+              id: { type: "string" },
+              name: { type: "string" },
+              city: { type: "string" },
+              sector: { type: "string" },
+              conviction_score: { type: "integer" },
+              confidence: { type: "integer" },
+              revenue_eur: { type: "integer" },
+              ebitda_eur: { type: "integer" },
+              valuation_midpoint_eur: { type: "integer" },
+              estimated_dscr: { type: "number" },
+              why_it_ranks: { type: "string" },
+            },
+          },
+        },
+        financing_summary: {
+          type: "object",
+          required: [
+            "target_name",
+            "valuation_midpoint_eur",
+            "buyer_cash_eur",
+            "senior_debt_eur",
+            "seller_note_eur",
+            "earnout_eur",
+            "estimated_dscr",
+            "equity_gap_eur",
+          ],
+          properties: {
+            target_name: { type: "string" },
+            valuation_midpoint_eur: { type: "integer" },
+            buyer_cash_eur: { type: "integer" },
+            senior_debt_eur: { type: "integer" },
+            seller_note_eur: { type: "integer" },
+            earnout_eur: { type: "integer" },
+            estimated_dscr: { type: "number" },
+            equity_gap_eur: { type: "integer" },
+          },
+        },
+        critical_unknowns: {
+          type: "array",
+          minItems: 3,
+          maxItems: 8,
+          items: { type: "string" },
+        },
+        key_takeaways: {
+          type: "array",
+          minItems: 3,
+          maxItems: 6,
+          items: { type: "string" },
+        },
+        recommended_next_actions: {
+          type: "array",
+          minItems: 3,
+          maxItems: 6,
+          items: { type: "string" },
+        },
+        suggested_follow_up_prompts: {
+          type: "array",
+          minItems: 3,
+          maxItems: 3,
+          items: { type: "string" },
+        },
+      },
+    },
     campaign_id: { type: "string" },
     generated_at: { type: "string" },
     disclosure: { type: "string", const: DISCLOSURE },
@@ -198,14 +314,6 @@ const outputSchema = {
       minItems: 10,
       maxItems: 10,
       items: targetSummarySchema,
-    },
-    conviction_targets: {
-      type: "array",
-      minItems: 10,
-      maxItems: 10,
-      description:
-        "The same ten targets, retained as the explicit V2 conviction-list field.",
-      items: { type: "object" },
     },
     top_target_id: { type: "string" },
     ranking_explanation: {
@@ -333,39 +441,6 @@ const outputSchema = {
         },
       },
     },
-    codex_response: {
-      type: "object",
-      description:
-        "A concise, ready-to-display answer for Codex, followed by useful next actions and follow-up prompts.",
-      required: [
-        "answer_markdown",
-        "key_takeaways",
-        "recommended_next_actions",
-        "suggested_follow_up_prompts",
-      ],
-      properties: {
-        answer_markdown: { type: "string", minLength: 200 },
-        key_takeaways: {
-          type: "array",
-          minItems: 3,
-          maxItems: 6,
-          items: { type: "string" },
-        },
-        recommended_next_actions: {
-          type: "array",
-          minItems: 3,
-          maxItems: 6,
-          items: { type: "string" },
-        },
-        suggested_follow_up_prompts: {
-          type: "array",
-          minItems: 3,
-          maxItems: 3,
-          items: { type: "string" },
-        },
-      },
-    },
-    campaign_url: { type: "string", format: "uri" },
   },
 };
 
@@ -394,7 +469,7 @@ const manifest = {
   slug: "buyable",
   display_name: "Buyable",
   description:
-    "Buyable gives Codex an acquisition team in one action: it scans 2,500 private businesses, ranks the best targets for your budget, explains why #1 wins, models financing and prepares the Deal Pack. Try in Codex: “Use Ginse app app.ginse.ai/elibenbaruk-cd9272/buyable to find the best service business around Lyon I can acquire with €250,000.”",
+    "Buyable gives Codex an acquisition team in one action: it ranks private businesses, explains why #1 wins, models financing and always returns a ready acquisition dashboard with the complete Deal Pack. Try in Codex: “Use Ginse app app.ginse.ai/elibenbaruk-cd9272/buyable to find the best service business around Lyon I can acquire with €250,000, then show me the dashboard.”",
   presentation: {
     action: "Curate acquisition targets",
     input: {
@@ -402,8 +477,8 @@ const manifest = {
       icon: "text",
     },
     output: {
-      label: "Acquisition conviction list",
-      icon: "table",
+      label: "Acquisition dashboard and Deal Pack",
+      icon: "link",
     },
   },
   price: {

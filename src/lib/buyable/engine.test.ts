@@ -25,7 +25,8 @@ describe("Buyable acquisition intelligence engine", () => {
     expect(campaignOutputSchema.safeParse(campaign).success).toBe(true);
     expect(campaign.schema_version).toBe("2");
     expect(campaign.targets).toHaveLength(10);
-    expect(campaign.conviction_targets).toEqual(campaign.targets);
+    expect(campaign.dashboard.status).toBe("ready");
+    expect(campaign.dashboard.url).toBe(campaign.campaign_url);
     expect(funnel.universe_scanned).toBe(2_500);
     expect(funnel.universe_scanned).toBeGreaterThanOrEqual(funnel.thesis_compatible);
     expect(funnel.thesis_compatible).toBeGreaterThanOrEqual(
@@ -59,7 +60,20 @@ describe("Buyable acquisition intelligence engine", () => {
     expect(campaign.codex_response.answer_markdown).toContain(
       campaign.campaign_url,
     );
+    expect(Object.keys(campaign).slice(0, 4)).toEqual([
+      "schema_version",
+      "dashboard",
+      "campaign_url",
+      "codex_response",
+    ]);
     expect(campaign.codex_response.suggested_follow_up_prompts).toHaveLength(3);
+    expect(campaign.codex_response.top_targets).toHaveLength(3);
+    expect(campaign.codex_response.answer_markdown).toContain(
+      "The three finalists",
+    );
+    expect(campaign.codex_response.critical_unknowns.length).toBeGreaterThanOrEqual(
+      3,
+    );
   });
 
   it("keeps confidence separate from the transparent 100-point score", () => {

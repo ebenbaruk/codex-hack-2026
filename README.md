@@ -15,7 +15,7 @@ Ask Codex:
 
 > Use Ginse app app.ginse.ai/elibenbaruk-cd9272/buyable to find the best HVAC
 > and plumbing businesses around Lyon that I could acquire with €250,000 of
-> cash.
+> cash, then show me the returned acquisition dashboard.
 
 Buyable returns:
 

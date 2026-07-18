@@ -712,6 +712,7 @@ function buildArtifacts(
 function buildCodexResponse(
   topTarget: QualifiedTarget,
   runnerUp: QualifiedTarget,
+  finalists: QualifiedTarget[],
   funnel: MarketFunnel,
   financing: FinancingSnapshot,
   campaignUrl: string,
@@ -720,12 +721,40 @@ function buildCodexResponse(
   const cleanName = topTarget.name.replace(" — Démo", "");
   const cleanRunnerUpName = runnerUp.name.replace(" — Démo", "");
   const valuation = `${topTarget.valuation_range_eur.low.toLocaleString("fr-FR")} €–${topTarget.valuation_range_eur.high.toLocaleString("fr-FR")} €`;
+  const executiveSummary = `Buyable screened ${funnel.universe_scanned.toLocaleString("en-US")} synthetic private businesses and selected ${cleanName} as the strongest computed acquisition candidate for this buyer. It leads on the disclosed combination of economic quality, buyer fit, financeability, operating transferability and observable transition evidence, but ${topTarget.unknowns.length} material unknowns still require verification.`;
+  const topTargets = finalists.slice(0, 3).map((target, index) => ({
+    rank: index + 1,
+    id: target.id,
+    name: target.name.replace(" — Démo", ""),
+    city: target.city,
+    sector: sectorLabels[target.sector],
+    conviction_score: target.conviction_score,
+    confidence: target.confidence,
+    revenue_eur: target.estimated_financials.revenue_eur,
+    ebitda_eur: target.estimated_financials.ebitda_eur,
+    valuation_midpoint_eur: target.valuation_range_eur.midpoint,
+    estimated_dscr: target.financeability.base_dscr,
+    why_it_ranks: target.rank_explanation,
+  }));
+  const finalistRows = topTargets.map(
+    (target) =>
+      `| #${target.rank} | ${target.name} | ${target.conviction_score}/100 | ${target.confidence}% | ${target.revenue_eur.toLocaleString("fr-FR")} € | ${target.valuation_midpoint_eur.toLocaleString("fr-FR")} € | ${target.estimated_dscr.toFixed(2)}× |`,
+  );
 
   return {
+    executive_summary: executiveSummary,
     answer_markdown: [
-      "## Your acquisition conviction list is ready",
+      "## Your acquisition dashboard is ready",
       "",
-      `I analyzed **${funnel.universe_scanned.toLocaleString("en-US")} synthetic private businesses** and narrowed them to 10 targets that fit your acquisition thesis.`,
+      `[Open the complete dashboard, evidence and Deal Pack](${campaignUrl})`,
+      "",
+      executiveSummary,
+      "",
+      "### The three finalists",
+      "",
+      "| Rank | Business | Conviction | Confidence | Revenue | Midpoint valuation | DSCR |",
+      "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
+      ...finalistRows,
       "",
       `### My recommendation: ${cleanName}`,
       `**${topTarget.conviction_score}/100 conviction · ${topTarget.confidence}% evidence confidence · ${sectorLabels[topTarget.sector]} · ${topTarget.city}**`,
@@ -740,10 +769,33 @@ function buildCodexResponse(
       "",
       `The closest alternative is **${cleanRunnerUpName}**. Before approaching either company, verify normalized EBITDA, customer concentration, owner responsibilities and willingness to discuss a transition.`,
       "",
-      `[Open the complete evidence, comparison and Deal Pack](${campaignUrl})`,
+      "### Principal risks",
+      ...topTarget.why_not.slice(0, 4).map((risk) => `- ${risk}`),
+      "",
+      "### What must be verified",
+      ...topTarget.unknowns.slice(0, 6).map((unknown) => `- ${unknown}`),
+      "",
+      "### Recommended next actions",
+      `1. Compare ${cleanName} directly with ${cleanRunnerUpName} and identify what could reverse the ranking.`,
+      "2. Validate normalized EBITDA, recurring revenue, customer concentration and owner dependency.",
+      "3. Stress-test the offer before preparing a confidential owner approach.",
+      "",
+      `The dashboard contains the complete top 10, every evidence record, score breakdown, financing simulator, seller approach and acquisition documents.`,
       "",
       "_Synthetic hackathon demonstration data. Draft analysis only; professional validation is required._",
     ].join("\n"),
+    top_targets: topTargets,
+    financing_summary: {
+      target_name: cleanName,
+      valuation_midpoint_eur: financing.midpoint_valuation_eur,
+      buyer_cash_eur: financing.buyer_cash_eur,
+      senior_debt_eur: financing.senior_debt_eur,
+      seller_note_eur: financing.seller_note_eur,
+      earnout_eur: financing.earnout_eur,
+      estimated_dscr: financing.estimated_dscr,
+      equity_gap_eur: financing.equity_gap_eur,
+    },
+    critical_unknowns: topTarget.unknowns.slice(0, 6),
     key_takeaways: [
       `${cleanName} is the highest-ranked target at ${topTarget.conviction_score}/100 with ${topTarget.confidence}% evidence confidence.`,
       `${rankingLead} The ranking remains conditional on the disclosed synthetic evidence.`,
@@ -838,6 +890,7 @@ export function generateCampaign(
   const codexResponse = buildCodexResponse(
     topTarget,
     runnerUp,
+    candidates,
     funnel,
     financingSnapshot,
     campaignUrl,
@@ -846,6 +899,21 @@ export function generateCampaign(
 
   const output: CampaignOutput = {
     schema_version: "2",
+    dashboard: {
+      url: campaignUrl,
+      title: `Acquisition dashboard — ${topTarget.name.replace(" — Démo", "")}`,
+      status: "ready",
+      contains: [
+        "Ten ranked acquisition targets",
+        "Evidence and confidence for every score",
+        "Valuation and financing scenarios",
+        "Seller approach and complete Deal Pack",
+      ],
+      call_to_action:
+        "Show this dashboard link to the user as the primary deliverable.",
+    },
+    campaign_url: campaignUrl,
+    codex_response: codexResponse,
     campaign_id: campaignId,
     generated_at: options?.generatedAt ?? new Date().toISOString(),
     disclosure: DISCLOSURE,
@@ -854,7 +922,6 @@ export function generateCampaign(
     market_funnel: funnel,
     rejection_reasons: rejections,
     targets: candidates,
-    conviction_targets: candidates,
     top_target_id: topTarget.id,
     ranking_explanation: {
       headline: `${topTarget.name} is the #1 acquisition conviction at ${topTarget.conviction_score}/100.`,
@@ -874,8 +941,6 @@ export function generateCampaign(
     offer_scenarios: offerScenarios,
     outreach_packet: outreach,
     generated_artifacts: buildArtifacts(topTarget),
-    codex_response: codexResponse,
-    campaign_url: campaignUrl,
   };
 
   return campaignOutputSchema.parse(output);
