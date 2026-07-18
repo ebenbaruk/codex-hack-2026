@@ -7,8 +7,9 @@ if (!process.env.DATABASE_URL) {
 
 const sql = neon(process.env.DATABASE_URL);
 
-for (const business of syntheticBusinesses) {
-  await sql`
+async function seed() {
+  for (const business of syntheticBusinesses) {
+    await sql`
     INSERT INTO businesses (
       id,
       name,
@@ -41,8 +42,13 @@ for (const business of syntheticBusinesses) {
       name = EXCLUDED.name,
       revenue_estimate_eur = EXCLUDED.revenue_estimate_eur,
       evidence = EXCLUDED.evidence
-  `;
+    `;
+  }
+
+  console.log(`Seeded ${syntheticBusinesses.length} synthetic businesses.`);
 }
 
-console.log(`Seeded ${syntheticBusinesses.length} synthetic businesses.`);
-
+seed().catch((error) => {
+  console.error("Database seed failed", error);
+  process.exitCode = 1;
+});

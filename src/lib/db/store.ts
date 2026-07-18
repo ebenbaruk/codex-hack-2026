@@ -225,8 +225,12 @@ let store: BuyableStore | null = null;
 
 export function getBuyableStore(): BuyableStore {
   if (!store) {
+    if (process.env.VERCEL && !hasDatabase()) {
+      throw new Error(
+        "DATABASE_URL is required on Vercel to guarantee durable Ginse idempotency",
+      );
+    }
     store = hasDatabase() ? new NeonBuyableStore() : new MemoryBuyableStore();
   }
   return store;
 }
-
