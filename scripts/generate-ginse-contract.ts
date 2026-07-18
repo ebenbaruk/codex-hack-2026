@@ -477,7 +477,7 @@ const manifest = {
       icon: "text",
     },
     output: {
-      label: "Acquisition dashboard and Deal Pack",
+      label: "Acquisition dashboard",
       icon: "link",
     },
   },
