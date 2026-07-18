@@ -1,5 +1,6 @@
 {
   "region": "Auvergne-Rhône-Alpes",
+  "target_city": "Lyon",
   "sectors": [
     "hvac",
     "plumbing"
@@ -9,5 +10,18 @@
     "min": 750000,
     "max": 4000000
   },
+  "employee_range": {
+    "min": 6,
+    "max": 60
+  },
+  "preferred_signals": [
+    "recurring_revenue",
+    "management_depth",
+    "low_capex"
+  ],
+  "avoid_signals": [
+    "high_capex",
+    "customer_concentration"
+  ],
   "buyer_profile": "Hands-on operator seeking a recurring-revenue local service business"
 }

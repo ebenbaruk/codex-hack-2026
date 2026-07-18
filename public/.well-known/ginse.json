@@ -1,16 +1,16 @@
 {
   "schema_version": "2",
   "slug": "buyable",
-  "display_name": "Buyable — Team ELI",
-  "description": "Turn an acquisition thesis into ten evidence-backed off-market French business targets and an outreach-ready top lead.",
+  "display_name": "Buyable",
+  "description": "Give Codex the acquisition intelligence to find, prove and pursue the best private businesses to buy.",
   "presentation": {
-    "action": "Qualify off-market targets",
+    "action": "Curate acquisition targets",
     "input": {
-      "label": "Acquisition thesis",
+      "label": "Acquisition search",
       "icon": "text"
     },
     "output": {
-      "label": "Qualified target pipeline",
+      "label": "Acquisition conviction list",
       "icon": "table"
     }
   },
@@ -20,10 +20,10 @@
   },
   "run_url": "https://codex-hack-2026.vercel.app/run",
   "input_schema": {
-    "type": "object",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "Buyable acquisition thesis",
-    "description": "A France local-services acquisition thesis for an evidence-backed synthetic target search.",
+    "title": "Buyable acquisition search",
+    "description": "A buyer thesis used to scan, rank and package synthetic private-business acquisition targets across France.",
+    "type": "object",
     "additionalProperties": false,
     "required": [
       "region",
@@ -35,26 +35,48 @@
     "properties": {
       "region": {
         "type": "string",
-        "const": "Auvergne-Rhône-Alpes"
+        "enum": [
+          "France",
+          "Auvergne-Rhône-Alpes",
+          "Bourgogne-Franche-Comté",
+          "Bretagne",
+          "Centre-Val de Loire",
+          "Corse",
+          "Grand Est",
+          "Hauts-de-France",
+          "Île-de-France",
+          "Normandie",
+          "Nouvelle-Aquitaine",
+          "Occitanie",
+          "Pays de la Loire",
+          "Provence-Alpes-Côte d’Azur"
+        ]
       },
       "sectors": {
         "type": "array",
         "minItems": 1,
-        "maxItems": 4,
+        "maxItems": 10,
+        "uniqueItems": true,
         "items": {
           "type": "string",
           "enum": [
             "hvac",
             "plumbing",
             "commercial_cleaning",
-            "industrial_maintenance"
+            "industrial_maintenance",
+            "electrical_contracting",
+            "fire_safety",
+            "elevator_maintenance",
+            "landscaping",
+            "waste_management",
+            "business_security"
           ]
         }
       },
       "cash_available_eur": {
         "type": "integer",
         "minimum": 50000,
-        "maximum": 2000000
+        "maximum": 10000000
       },
       "revenue_range_eur": {
         "type": "object",
@@ -67,26 +89,83 @@
           "min": {
             "type": "integer",
             "minimum": 250000,
-            "maximum": 10000000
+            "maximum": 20000000
           },
           "max": {
             "type": "integer",
             "minimum": 500000,
-            "maximum": 20000000
+            "maximum": 50000000
           }
         }
       },
       "buyer_profile": {
         "type": "string",
         "minLength": 12,
-        "maxLength": 300
+        "maxLength": 500
+      },
+      "target_city": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80
+      },
+      "employee_range": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "min",
+          "max"
+        ],
+        "properties": {
+          "min": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500
+          },
+          "max": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 1000
+          }
+        }
+      },
+      "preferred_signals": {
+        "type": "array",
+        "uniqueItems": true,
+        "maxItems": 5,
+        "items": {
+          "type": "string",
+          "enum": [
+            "recurring_revenue",
+            "management_depth",
+            "low_capex",
+            "diversified_customers",
+            "visible_transition_signal"
+          ]
+        }
+      },
+      "avoid_signals": {
+        "type": "array",
+        "uniqueItems": true,
+        "maxItems": 3,
+        "items": {
+          "type": "string",
+          "enum": [
+            "project_heavy",
+            "high_capex",
+            "customer_concentration"
+          ]
+        }
       }
     }
   },
   "output_schema": {
-    "type": "object",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
     "properties": {
+      "schema_version": {
+        "type": "string",
+        "const": "2"
+      },
       "campaign_id": {
         "type": "string"
       },
@@ -99,6 +178,207 @@
       },
       "thesis_summary": {
         "type": "string"
+      },
+      "applied_filters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "enum": [
+              "France",
+              "Auvergne-Rhône-Alpes",
+              "Bourgogne-Franche-Comté",
+              "Bretagne",
+              "Centre-Val de Loire",
+              "Corse",
+              "Grand Est",
+              "Hauts-de-France",
+              "Île-de-France",
+              "Normandie",
+              "Nouvelle-Aquitaine",
+              "Occitanie",
+              "Pays de la Loire",
+              "Provence-Alpes-Côte d’Azur"
+            ]
+          },
+          "sectors": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "hvac",
+                "plumbing",
+                "commercial_cleaning",
+                "industrial_maintenance",
+                "electrical_contracting",
+                "fire_safety",
+                "elevator_maintenance",
+                "landscaping",
+                "waste_management",
+                "business_security"
+              ]
+            }
+          },
+          "cash_available_eur": {
+            "type": "integer",
+            "minimum": 50000,
+            "maximum": 10000000
+          },
+          "revenue_range_eur": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer",
+                "minimum": 250000,
+                "maximum": 20000000
+              },
+              "max": {
+                "type": "integer",
+                "minimum": 500000,
+                "maximum": 50000000
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "buyer_profile": {
+            "type": "string",
+            "minLength": 12,
+            "maxLength": 500
+          },
+          "target_city": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "employee_range": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 500
+              },
+              "max": {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 1000
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "preferred_signals": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "recurring_revenue",
+                "management_depth",
+                "low_capex",
+                "diversified_customers",
+                "visible_transition_signal"
+              ]
+            }
+          },
+          "avoid_signals": {
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "project_heavy",
+                "high_capex",
+                "customer_concentration"
+              ]
+            }
+          }
+        },
+        "required": [
+          "region",
+          "sectors",
+          "cash_available_eur",
+          "revenue_range_eur",
+          "buyer_profile"
+        ],
+        "additionalProperties": false
+      },
+      "market_funnel": {
+        "type": "object",
+        "properties": {
+          "universe_scanned": {
+            "type": "integer",
+            "minimum": 2500,
+            "maximum": 9007199254740991
+          },
+          "thesis_compatible": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "economically_solid": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "financeable": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "transition_relevant": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "conviction_list": {
+            "type": "number",
+            "const": 10
+          }
+        },
+        "required": [
+          "universe_scanned",
+          "thesis_compatible",
+          "economically_solid",
+          "financeable",
+          "transition_relevant",
+          "conviction_list"
+        ],
+        "additionalProperties": false
+      },
+      "rejection_reasons": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "detail": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "reason",
+            "count",
+            "detail"
+          ],
+          "additionalProperties": false
+        }
       },
       "targets": {
         "minItems": 10,
@@ -119,7 +399,31 @@
                 "hvac",
                 "plumbing",
                 "commercial_cleaning",
-                "industrial_maintenance"
+                "industrial_maintenance",
+                "electrical_contracting",
+                "fire_safety",
+                "elevator_maintenance",
+                "landscaping",
+                "waste_management",
+                "business_security"
+              ]
+            },
+            "region": {
+              "type": "string",
+              "enum": [
+                "Auvergne-Rhône-Alpes",
+                "Bourgogne-Franche-Comté",
+                "Bretagne",
+                "Centre-Val de Loire",
+                "Corse",
+                "Grand Est",
+                "Hauts-de-France",
+                "Île-de-France",
+                "Normandie",
+                "Nouvelle-Aquitaine",
+                "Occitanie",
+                "Pays de la Loire",
+                "Provence-Alpes-Côte d’Azur"
               ]
             },
             "city": {
@@ -144,6 +448,11 @@
               "minimum": -9007199254740991,
               "maximum": 9007199254740991
             },
+            "conviction_score": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
             "qualification_score": {
               "type": "integer",
               "minimum": 0,
@@ -157,30 +466,48 @@
             "score_breakdown": {
               "type": "object",
               "properties": {
-                "thesis_fit": {
-                  "type": "number"
+                "economic_quality": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 25
                 },
-                "economic_attractiveness": {
-                  "type": "number"
+                "buyer_fit": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20
                 },
-                "evidence_quality": {
-                  "type": "number"
+                "financeability": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20
                 },
-                "succession_signals": {
-                  "type": "number"
+                "operational_transferability": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 15
+                },
+                "transition_signals": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
                 },
                 "contactability": {
-                  "type": "number"
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5
                 },
                 "data_completeness": {
-                  "type": "number"
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5
                 }
               },
               "required": [
-                "thesis_fit",
-                "economic_attractiveness",
-                "evidence_quality",
-                "succession_signals",
+                "economic_quality",
+                "buyer_fit",
+                "financeability",
+                "operational_transferability",
+                "transition_signals",
                 "contactability",
                 "data_completeness"
               ],
@@ -204,13 +531,90 @@
                 },
                 "recurring_revenue_ratio": {
                   "type": "number"
+                },
+                "customer_concentration_ratio": {
+                  "type": "number"
+                },
+                "maintenance_capex_ratio": {
+                  "type": "number"
+                },
+                "debt_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "three_year_revenue_cagr": {
+                  "type": "number"
+                },
+                "free_cash_flow_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "financial_history": {
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "year": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "const": 2023
+                          },
+                          {
+                            "type": "number",
+                            "const": 2024
+                          },
+                          {
+                            "type": "number",
+                            "const": 2025
+                          }
+                        ]
+                      },
+                      "revenue_eur": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ebitda_eur": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ebitda_margin": {
+                        "type": "number"
+                      },
+                      "free_cash_flow_eur": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "year",
+                      "revenue_eur",
+                      "ebitda_eur",
+                      "ebitda_margin",
+                      "free_cash_flow_eur"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
                 "revenue_eur",
                 "ebitda_eur",
                 "ebitda_margin",
-                "recurring_revenue_ratio"
+                "recurring_revenue_ratio",
+                "customer_concentration_ratio",
+                "maintenance_capex_ratio",
+                "debt_eur",
+                "three_year_revenue_cagr",
+                "free_cash_flow_eur",
+                "financial_history"
               ],
               "additionalProperties": false
             },
@@ -227,6 +631,11 @@
                   "minimum": -9007199254740991,
                   "maximum": 9007199254740991
                 },
+                "midpoint": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
                 "methodology": {
                   "type": "string"
                 }
@@ -234,11 +643,47 @@
               "required": [
                 "low",
                 "high",
+                "midpoint",
                 "methodology"
               ],
               "additionalProperties": false
             },
+            "financeability": {
+              "type": "object",
+              "properties": {
+                "required_equity_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "equity_gap_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "affordable_with_current_cash": {
+                  "type": "boolean"
+                },
+                "estimated_debt_capacity_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "base_dscr": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "required_equity_eur",
+                "equity_gap_eur",
+                "affordable_with_current_cash",
+                "estimated_debt_capacity_eur",
+                "base_dscr"
+              ],
+              "additionalProperties": false
+            },
             "evidence": {
+              "minItems": 6,
               "type": "array",
               "items": {
                 "type": "object",
@@ -254,7 +699,64 @@
                       "reviews",
                       "hiring",
                       "operations",
-                      "commercial"
+                      "commercial",
+                      "financial",
+                      "leadership"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "detail": {
+                    "type": "string"
+                  },
+                  "observed_at": {
+                    "type": "string"
+                  },
+                  "strength": {
+                    "type": "string",
+                    "enum": [
+                      "strong",
+                      "medium",
+                      "weak"
+                    ]
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "classification": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "inferred"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "label",
+                  "detail",
+                  "observed_at",
+                  "strength",
+                  "source",
+                  "classification"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "transition_signals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "long_leadership_tenure",
+                      "no_visible_successor",
+                      "leadership_change",
+                      "public_transition_mention"
                     ]
                   },
                   "label": {
@@ -279,7 +781,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "type",
                   "label",
                   "detail",
@@ -290,22 +791,88 @@
                 "additionalProperties": false
               }
             },
+            "facts": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "inferences": {
+              "minItems": 1,
               "type": "array",
               "items": {
                 "type": "string"
               }
             },
             "unknowns": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "why_buy": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "why_not": {
+              "minItems": 1,
               "type": "array",
               "items": {
                 "type": "string"
               }
             },
             "why_it_fits": {
+              "minItems": 1,
               "type": "array",
               "items": {
                 "type": "string"
+              }
+            },
+            "rank_explanation": {
+              "type": "string"
+            },
+            "contact_paths": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "business_email",
+                      "business_phone",
+                      "contact_form"
+                    ]
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "value",
+                  "role",
+                  "confidence",
+                  "note"
+                ],
+                "additionalProperties": false
               }
             },
             "contact_path": {
@@ -322,6 +889,14 @@
                 "value": {
                   "type": "string"
                 },
+                "role": {
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
                 "note": {
                   "type": "string"
                 }
@@ -329,6 +904,8 @@
               "required": [
                 "channel",
                 "value",
+                "role",
+                "confidence",
                 "note"
               ],
               "additionalProperties": false
@@ -345,21 +922,603 @@
             "id",
             "name",
             "sector",
+            "region",
             "city",
             "department",
             "latitude",
             "longitude",
             "founded_year",
             "employee_estimate",
+            "conviction_score",
             "qualification_score",
             "confidence",
             "score_breakdown",
             "estimated_financials",
             "valuation_range_eur",
+            "financeability",
             "evidence",
+            "transition_signals",
+            "facts",
             "inferences",
             "unknowns",
+            "why_buy",
+            "why_not",
             "why_it_fits",
+            "rank_explanation",
+            "contact_paths",
+            "contact_path",
+            "next_action",
+            "listed_for_sale"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "conviction_targets": {
+        "minItems": 10,
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "sector": {
+              "type": "string",
+              "enum": [
+                "hvac",
+                "plumbing",
+                "commercial_cleaning",
+                "industrial_maintenance",
+                "electrical_contracting",
+                "fire_safety",
+                "elevator_maintenance",
+                "landscaping",
+                "waste_management",
+                "business_security"
+              ]
+            },
+            "region": {
+              "type": "string",
+              "enum": [
+                "Auvergne-Rhône-Alpes",
+                "Bourgogne-Franche-Comté",
+                "Bretagne",
+                "Centre-Val de Loire",
+                "Corse",
+                "Grand Est",
+                "Hauts-de-France",
+                "Île-de-France",
+                "Normandie",
+                "Nouvelle-Aquitaine",
+                "Occitanie",
+                "Pays de la Loire",
+                "Provence-Alpes-Côte d’Azur"
+              ]
+            },
+            "city": {
+              "type": "string"
+            },
+            "department": {
+              "type": "string"
+            },
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            },
+            "founded_year": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "employee_estimate": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "conviction_score": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "qualification_score": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "confidence": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "score_breakdown": {
+              "type": "object",
+              "properties": {
+                "economic_quality": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 25
+                },
+                "buyer_fit": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20
+                },
+                "financeability": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20
+                },
+                "operational_transferability": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 15
+                },
+                "transition_signals": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "contactability": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5
+                },
+                "data_completeness": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5
+                }
+              },
+              "required": [
+                "economic_quality",
+                "buyer_fit",
+                "financeability",
+                "operational_transferability",
+                "transition_signals",
+                "contactability",
+                "data_completeness"
+              ],
+              "additionalProperties": false
+            },
+            "estimated_financials": {
+              "type": "object",
+              "properties": {
+                "revenue_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "ebitda_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "ebitda_margin": {
+                  "type": "number"
+                },
+                "recurring_revenue_ratio": {
+                  "type": "number"
+                },
+                "customer_concentration_ratio": {
+                  "type": "number"
+                },
+                "maintenance_capex_ratio": {
+                  "type": "number"
+                },
+                "debt_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "three_year_revenue_cagr": {
+                  "type": "number"
+                },
+                "free_cash_flow_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "financial_history": {
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "year": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "const": 2023
+                          },
+                          {
+                            "type": "number",
+                            "const": 2024
+                          },
+                          {
+                            "type": "number",
+                            "const": 2025
+                          }
+                        ]
+                      },
+                      "revenue_eur": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ebitda_eur": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ebitda_margin": {
+                        "type": "number"
+                      },
+                      "free_cash_flow_eur": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "year",
+                      "revenue_eur",
+                      "ebitda_eur",
+                      "ebitda_margin",
+                      "free_cash_flow_eur"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "revenue_eur",
+                "ebitda_eur",
+                "ebitda_margin",
+                "recurring_revenue_ratio",
+                "customer_concentration_ratio",
+                "maintenance_capex_ratio",
+                "debt_eur",
+                "three_year_revenue_cagr",
+                "free_cash_flow_eur",
+                "financial_history"
+              ],
+              "additionalProperties": false
+            },
+            "valuation_range_eur": {
+              "type": "object",
+              "properties": {
+                "low": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "high": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "midpoint": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "methodology": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "low",
+                "high",
+                "midpoint",
+                "methodology"
+              ],
+              "additionalProperties": false
+            },
+            "financeability": {
+              "type": "object",
+              "properties": {
+                "required_equity_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "equity_gap_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "affordable_with_current_cash": {
+                  "type": "boolean"
+                },
+                "estimated_debt_capacity_eur": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "base_dscr": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "required_equity_eur",
+                "equity_gap_eur",
+                "affordable_with_current_cash",
+                "estimated_debt_capacity_eur",
+                "base_dscr"
+              ],
+              "additionalProperties": false
+            },
+            "evidence": {
+              "minItems": 6,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "registry",
+                      "website",
+                      "reviews",
+                      "hiring",
+                      "operations",
+                      "commercial",
+                      "financial",
+                      "leadership"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "detail": {
+                    "type": "string"
+                  },
+                  "observed_at": {
+                    "type": "string"
+                  },
+                  "strength": {
+                    "type": "string",
+                    "enum": [
+                      "strong",
+                      "medium",
+                      "weak"
+                    ]
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "classification": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "inferred"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "label",
+                  "detail",
+                  "observed_at",
+                  "strength",
+                  "source",
+                  "classification"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "transition_signals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "long_leadership_tenure",
+                      "no_visible_successor",
+                      "leadership_change",
+                      "public_transition_mention"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "detail": {
+                    "type": "string"
+                  },
+                  "observed_at": {
+                    "type": "string"
+                  },
+                  "strength": {
+                    "type": "string",
+                    "enum": [
+                      "strong",
+                      "medium",
+                      "weak"
+                    ]
+                  },
+                  "source": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "label",
+                  "detail",
+                  "observed_at",
+                  "strength",
+                  "source"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "facts": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "inferences": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "unknowns": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "why_buy": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "why_not": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "why_it_fits": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rank_explanation": {
+              "type": "string"
+            },
+            "contact_paths": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "business_email",
+                      "business_phone",
+                      "contact_form"
+                    ]
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "value",
+                  "role",
+                  "confidence",
+                  "note"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "contact_path": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "business_email",
+                    "business_phone",
+                    "contact_form"
+                  ]
+                },
+                "value": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "value",
+                "role",
+                "confidence",
+                "note"
+              ],
+              "additionalProperties": false
+            },
+            "next_action": {
+              "type": "string"
+            },
+            "listed_for_sale": {
+              "type": "boolean",
+              "const": false
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "sector",
+            "region",
+            "city",
+            "department",
+            "latitude",
+            "longitude",
+            "founded_year",
+            "employee_estimate",
+            "conviction_score",
+            "qualification_score",
+            "confidence",
+            "score_breakdown",
+            "estimated_financials",
+            "valuation_range_eur",
+            "financeability",
+            "evidence",
+            "transition_signals",
+            "facts",
+            "inferences",
+            "unknowns",
+            "why_buy",
+            "why_not",
+            "why_it_fits",
+            "rank_explanation",
+            "contact_paths",
             "contact_path",
             "next_action",
             "listed_for_sale"
@@ -369,6 +1528,170 @@
       },
       "top_target_id": {
         "type": "string"
+      },
+      "ranking_explanation": {
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string"
+          },
+          "why_number_one_wins": {
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "methodology": {
+            "type": "string"
+          },
+          "limitation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "headline",
+          "why_number_one_wins",
+          "methodology",
+          "limitation"
+        ],
+        "additionalProperties": false
+      },
+      "top_acquisition_case": {
+        "type": "object",
+        "properties": {
+          "target_id": {
+            "type": "string"
+          },
+          "executive_summary": {
+            "type": "string"
+          },
+          "investment_thesis": {
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "why_now": {
+            "minItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "key_risks": {
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deal_breakers": {
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "information_request": {
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "section": {
+                  "type": "string"
+                },
+                "documents": {
+                  "minItems": 2,
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "section",
+                "documents"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "lender_memo": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string"
+              },
+              "credit_case": {
+                "minItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mitigants": {
+                "minItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "request",
+              "credit_case",
+              "mitigants"
+            ],
+            "additionalProperties": false
+          },
+          "loi_draft": {
+            "type": "string"
+          },
+          "hundred_day_plan": {
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "phase": {
+                  "type": "string"
+                },
+                "days": {
+                  "type": "string"
+                },
+                "priorities": {
+                  "minItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "phase",
+                "days",
+                "priorities"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "target_id",
+          "executive_summary",
+          "investment_thesis",
+          "why_now",
+          "key_risks",
+          "deal_breakers",
+          "information_request",
+          "lender_memo",
+          "loi_draft",
+          "hundred_day_plan"
+        ],
+        "additionalProperties": false
       },
       "financing_snapshot": {
         "type": "object",
@@ -396,6 +1719,11 @@
             "minimum": -9007199254740991,
             "maximum": 9007199254740991
           },
+          "earnout_eur": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
           "annual_debt_service_eur": {
             "type": "integer",
             "minimum": -9007199254740991,
@@ -403,6 +1731,11 @@
           },
           "estimated_dscr": {
             "type": "number"
+          },
+          "equity_gap_eur": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
           },
           "assumption": {
             "type": "string"
@@ -417,12 +1750,98 @@
           "buyer_cash_eur",
           "senior_debt_eur",
           "seller_note_eur",
+          "earnout_eur",
           "annual_debt_service_eur",
           "estimated_dscr",
+          "equity_gap_eur",
           "assumption",
           "disclaimer"
         ],
         "additionalProperties": false
+      },
+      "offer_scenarios": {
+        "minItems": 3,
+        "maxItems": 3,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "enum": [
+                "balanced",
+                "seller_aligned",
+                "cash_forward"
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "target_id": {
+              "type": "string"
+            },
+            "enterprise_value_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "buyer_cash_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "senior_debt_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "seller_note_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "earnout_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "annual_debt_service_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "estimated_dscr": {
+              "type": "number"
+            },
+            "seller_cash_at_close_eur": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "rationale": {
+              "type": "string"
+            },
+            "feasible": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "label",
+            "target_id",
+            "enterprise_value_eur",
+            "buyer_cash_eur",
+            "senior_debt_eur",
+            "seller_note_eur",
+            "earnout_eur",
+            "annual_debt_service_eur",
+            "estimated_dscr",
+            "seller_cash_at_close_eur",
+            "rationale",
+            "feasible"
+          ],
+          "additionalProperties": false
+        }
       },
       "outreach_packet": {
         "type": "object",
@@ -439,6 +1858,13 @@
           "call_opener": {
             "type": "string"
           },
+          "first_meeting_questions": {
+            "minItems": 5,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "diligence_questions": {
             "minItems": 5,
             "type": "array",
@@ -452,9 +1878,53 @@
           "email_subject",
           "email_body",
           "call_opener",
+          "first_meeting_questions",
           "diligence_questions"
         ],
         "additionalProperties": false
+      },
+      "generated_artifacts": {
+        "minItems": 7,
+        "maxItems": 7,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "investment_memo",
+                "offer_scenarios",
+                "seller_approach",
+                "lender_memo",
+                "loi_draft",
+                "diligence_checklist",
+                "hundred_day_plan"
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "const": "draft"
+            },
+            "review_required": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "type",
+            "title",
+            "status",
+            "review_required"
+          ],
+          "additionalProperties": false
+        }
       },
       "campaign_url": {
         "type": "string",
@@ -462,23 +1932,33 @@
       }
     },
     "required": [
+      "schema_version",
       "campaign_id",
       "generated_at",
       "disclosure",
       "thesis_summary",
+      "applied_filters",
+      "market_funnel",
+      "rejection_reasons",
       "targets",
+      "conviction_targets",
       "top_target_id",
+      "ranking_explanation",
+      "top_acquisition_case",
       "financing_snapshot",
+      "offer_scenarios",
       "outreach_packet",
+      "generated_artifacts",
       "campaign_url"
     ],
     "additionalProperties": false,
-    "title": "Buyable qualified target pipeline",
-    "description": "Ten ranked synthetic off-market targets plus top-target financing and outreach preparation."
+    "title": "Buyable acquisition conviction list",
+    "description": "A market funnel, ten explainable conviction targets and a complete acquisition Deal Pack for the top business."
   },
   "example": {
     "input": {
       "region": "Auvergne-Rhône-Alpes",
+      "target_city": "Lyon",
       "sectors": [
         "hvac",
         "plumbing"
@@ -488,6 +1968,19 @@
         "min": 750000,
         "max": 4000000
       },
+      "employee_range": {
+        "min": 6,
+        "max": 60
+      },
+      "preferred_signals": [
+        "recurring_revenue",
+        "management_depth",
+        "low_capex"
+      ],
+      "avoid_signals": [
+        "high_capex",
+        "customer_concentration"
+      ],
       "buyer_profile": "Hands-on operator seeking a recurring-revenue local service business"
     }
   },

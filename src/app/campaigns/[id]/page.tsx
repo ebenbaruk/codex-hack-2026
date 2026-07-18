@@ -14,7 +14,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: id === "demo-lyon-services" ? "Lyon acquisition campaign" : "Acquisition campaign",
+    title:
+      id === "demo-lyon-services"
+        ? "Lyon acquisition conviction list"
+        : "Acquisition conviction list",
   };
 }
 

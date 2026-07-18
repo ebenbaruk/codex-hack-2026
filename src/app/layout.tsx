@@ -6,11 +6,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Buyable — Find the business before it is for sale",
+    default: "Buyable — Acquisition intelligence for Codex",
     template: "%s · Buyable",
   },
   description:
-    "A Codex-first acquisition engine that turns a thesis into qualified, evidence-backed off-market business targets.",
+    "Give Codex the intelligence to find, prove and pursue the best private businesses to buy.",
   applicationName: "Buyable",
   icons: {
     icon: "/favicon.ico",

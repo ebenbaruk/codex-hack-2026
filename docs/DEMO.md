@@ -2,66 +2,63 @@
 
 ## 0:00–0:25 — The problem
 
-“The best small businesses are often never listed for sale. Acquisition
-entrepreneurs spend weeks stitching together weak public signals, and Codex
-cannot turn those signals into a durable, financeable target pipeline on its
-own.”
+“Finding a small private business to acquire means searching fragmented company
+data, reconstructing finances, comparing incompatible opportunities and
+preparing a transaction manually.”
 
-Show the Buyable landing page and the flow:
+Show the promise:
 
 ```text
-Acquisition thesis → Qualify off-market targets → Qualified target pipeline
+Acquisition search → Market proof → Conviction list → Deal Pack
 ```
 
 ## 0:25–0:55 — Invoke through Codex
 
-Use this exact prompt:
+Use:
 
-> Use Buyable to find HVAC and plumbing businesses around Lyon that I could
-> acquire with €250,000 of cash.
+> Use Buyable to find the best HVAC and plumbing businesses around Lyon that I
+> could acquire with €250,000 of cash.
 
-Point out the €0.99 hackathon test price and that Ginse handles the invocation,
-signed authorization, test ledger, and receipt.
+Point out the €0.99 Ginse price and signed, idempotent invocation.
 
-## 0:55–1:45 — The killer moment
+## 0:55–1:40 — Killer moment: prove “best”
 
 Open the returned `campaign_url`.
 
-1. Show that Buyable scanned 40 and ranked 10 businesses not listed for sale.
-2. Select target two from the ranking and map to prove the dashboard is live.
-3. Show the 100-point breakdown and separate evidence confidence.
-4. Open **Evidence** and call out “What we know / infer / must verify.”
-5. Remind judges that every company is synthetic and no claim is made about
-   owner age or willingness to sell.
+1. Show `2,500 → thesis → economics → financeability → transition → top 10`.
+2. Open **Why #1 wins** and compare it with #2.
+3. Select another target from the ranking and France map.
+4. Change buyer cash from €250,000 to €75,000.
+5. Show the ranking, financeability score, equity gap and offer structures move.
 
-## 1:45–2:30 — From lead to actionable deal
+## 1:40–2:20 — Evidence, not prediction
 
-Open **Underwriting**:
+Open **Evidence**:
 
-- valuation range with the explicit EBITDA multiple;
-- buyer cash, senior debt, and seller-note scenario;
-- DSCR and financing disclaimer.
+- facts and synthetic provenance;
+- bounded inferences and evidence confidence;
+- observable leadership-continuity signals;
+- explicit unknowns.
 
-Open **Outreach packet**:
+State clearly: Buyable never infers owner age, predicts a sale or assumes owner
+intent.
 
-- personalized French email;
-- call opener;
-- first-call diligence questions;
-- “prepared only—never sent.”
+## 2:20–2:50 — From target to acquisition
 
-## 2:30–2:50 — Why Codex needs it
+Open **Financing**, **Seller approach** and **Documents**:
 
-Open **Agent JSON**.
+- three offer structures;
+- confidential outreach and first-meeting questions;
+- investment memo and lender memo;
+- LOI draft and diligence request;
+- first-100-days plan.
 
-“Codex does not receive a pretty paragraph. It receives ten evidence-backed
-business objects with scores, confidence, unknowns, valuation assumptions,
-contact paths, and next actions. Buyable gives Codex a new operational
-capability: sourcing and packaging an acquisition pipeline.”
+Everything is a draft for professional review and nothing is sent.
 
 ## 2:50–3:00 — Close
 
-“Lead databases sell names. Buyable sells acquisition readiness. One thesis in;
-ten defensible off-market conversations out.”
+“Lead databases return names. Buyable gives Codex acquisition conviction:
+which business to pursue, why it wins, whether the buyer can finance it, and
+what to do next.”
 
-If Wi-Fi fails, open `/campaigns/demo-lyon-services`; it is deterministic and
-requires no hidden setup.
+If Wi-Fi fails, use `/campaigns/demo-lyon-services`; it is deterministic.

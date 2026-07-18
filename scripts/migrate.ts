@@ -12,6 +12,7 @@ async function migrate() {
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     sector TEXT NOT NULL,
+    region TEXT NOT NULL DEFAULT 'Auvergne-Rhône-Alpes',
     city TEXT NOT NULL,
     department TEXT NOT NULL,
     latitude REAL NOT NULL,
@@ -19,14 +20,34 @@ async function migrate() {
     founded_year INTEGER NOT NULL,
     employee_estimate INTEGER NOT NULL,
     revenue_estimate_eur INTEGER NOT NULL,
+    ebitda_margin REAL,
+    recurring_revenue_ratio REAL,
+    financial_history JSONB,
+    transition_signals JSONB,
+    contact_paths JSONB,
+    profile JSONB,
     synthetic BOOLEAN NOT NULL DEFAULT TRUE,
     evidence JSONB NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )
   `;
 
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS region TEXT NOT NULL DEFAULT 'Auvergne-Rhône-Alpes'`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS ebitda_margin REAL`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS recurring_revenue_ratio REAL`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS financial_history JSONB`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS transition_signals JSONB`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS contact_paths JSONB`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS profile JSONB`;
+  await sql`ALTER TABLE businesses ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`;
+
   await sql`
   CREATE INDEX IF NOT EXISTS businesses_sector_idx ON businesses (sector)
+  `;
+
+  await sql`
+  CREATE INDEX IF NOT EXISTS businesses_region_idx ON businesses (region)
   `;
 
   await sql`

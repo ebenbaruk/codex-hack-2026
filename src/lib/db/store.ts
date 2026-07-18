@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { getSql, hasDatabase } from "./client";
+import { normalizeCampaignOutput } from "@/lib/buyable/engine";
 import type { AcquisitionInput, CampaignOutput } from "@/lib/buyable/types";
 
 export type StoredRun = {
@@ -108,7 +109,8 @@ class MemoryBuyableStore implements BuyableStore {
   }
 
   async getCampaign(id: string) {
-    return memoryState().campaigns.get(id) ?? null;
+    const output = memoryState().campaigns.get(id);
+    return output ? normalizeCampaignOutput(output) : null;
   }
 }
 
@@ -212,12 +214,14 @@ class NeonBuyableStore implements BuyableStore {
   async getCampaign(id: string) {
     const sql = getSql();
     const rows = (await sql`
-      SELECT output
+      SELECT input, output
       FROM campaigns
       WHERE id = ${id}
       LIMIT 1
-    `) as Array<{ output: CampaignOutput }>;
-    return rows[0]?.output ?? null;
+    `) as Array<{ input: unknown; output: unknown }>;
+    return rows[0]
+      ? normalizeCampaignOutput(rows[0].output, rows[0].input)
+      : null;
   }
 }
 
