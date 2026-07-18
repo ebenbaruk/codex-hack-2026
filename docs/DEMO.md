@@ -17,9 +17,13 @@ Acquisition search → Market proof → Conviction list → Deal Pack
 Use:
 
 > Use Buyable to find the best HVAC and plumbing businesses around Lyon that I
-> could acquire with €250,000 of cash.
+> could acquire with €250,000 of cash. Rank the top 10, explain why #1 wins,
+> stress-test the financing and tell me what I should verify first.
 
 Point out the €0.99 Ginse price and signed, idempotent invocation.
+Before opening the dashboard, show that Codex already received the recommended
+target, key economics, financing structure, unknowns, next actions and three
+useful follow-up prompts.
 
 ## 0:55–1:40 — Killer moment: prove “best”
 

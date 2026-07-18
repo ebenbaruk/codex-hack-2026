@@ -53,6 +53,13 @@ describe("Buyable acquisition intelligence engine", () => {
     expect(campaign.campaign_url).toBe(
       "https://buyable.example/campaigns/test-campaign",
     );
+    expect(campaign.codex_response.answer_markdown).toContain(
+      campaign.targets[0].name.replace(" — Démo", ""),
+    );
+    expect(campaign.codex_response.answer_markdown).toContain(
+      campaign.campaign_url,
+    );
+    expect(campaign.codex_response.suggested_follow_up_prompts).toHaveLength(3);
   });
 
   it("keeps confidence separate from the transparent 100-point score", () => {

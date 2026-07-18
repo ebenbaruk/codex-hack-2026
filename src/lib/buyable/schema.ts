@@ -332,6 +332,14 @@ export const campaignOutputSchema = z
           .strict(),
       )
       .length(7),
+    codex_response: z
+      .object({
+        answer_markdown: z.string().min(200),
+        key_takeaways: z.array(z.string()).min(3).max(6),
+        recommended_next_actions: z.array(z.string()).min(3).max(6),
+        suggested_follow_up_prompts: z.array(z.string()).length(3),
+      })
+      .strict(),
     campaign_url: z.string().url(),
   })
   .strict();

@@ -306,6 +306,13 @@ export type GeneratedArtifact = {
   review_required: boolean;
 };
 
+export type CodexResponse = {
+  answer_markdown: string;
+  key_takeaways: string[];
+  recommended_next_actions: string[];
+  suggested_follow_up_prompts: string[];
+};
+
 export type CampaignOutput = {
   schema_version: "2";
   campaign_id: string;
@@ -329,5 +336,6 @@ export type CampaignOutput = {
   offer_scenarios: OfferScenario[];
   outreach_packet: OutreachPacket;
   generated_artifacts: GeneratedArtifact[];
+  codex_response: CodexResponse;
   campaign_url: string;
 };

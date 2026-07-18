@@ -18,6 +18,7 @@ Ask Codex:
 
 Buyable returns:
 
+- a complete recommendation directly inside the Codex conversation;
 - a `2,500 → thesis → quality → financeability → transition → top 10` funnel;
 - a transparent 100-point Acquisition Conviction Score;
 - facts, bounded inferences, evidence confidence and unknowns;
@@ -25,6 +26,7 @@ Buyable returns:
 - three offer structures and live buyer-cash simulation;
 - an investment memo, seller approach, lender memo, LOI draft, diligence list
   and first-100-days plan.
+- a dashboard URL plus three contextual prompts so Codex can continue the work.
 
 The deterministic judge demo is available at
 `/campaigns/demo-lyon-services`.
@@ -33,7 +35,9 @@ The deterministic judge demo is available at
 
 Codex remains the reasoning layer. Buyable contributes the private-business
 universe, structured evidence, comparable calculations, transaction workflow
-and durable artifacts that Codex can call and reason over.
+and durable artifacts that Codex can call and reason over. Every invocation
+returns both a `codex_response` for the conversation and a `campaign_url` for
+the evidence-rich dashboard.
 
 ```text
 Acquisition search → Curate acquisition targets → Acquisition conviction list

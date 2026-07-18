@@ -151,6 +151,7 @@ const outputSchema = {
     "offer_scenarios",
     "outreach_packet",
     "generated_artifacts",
+    "codex_response",
     "campaign_url",
   ],
   properties: {
@@ -332,6 +333,38 @@ const outputSchema = {
         },
       },
     },
+    codex_response: {
+      type: "object",
+      description:
+        "A concise, ready-to-display answer for Codex, followed by useful next actions and follow-up prompts.",
+      required: [
+        "answer_markdown",
+        "key_takeaways",
+        "recommended_next_actions",
+        "suggested_follow_up_prompts",
+      ],
+      properties: {
+        answer_markdown: { type: "string", minLength: 200 },
+        key_takeaways: {
+          type: "array",
+          minItems: 3,
+          maxItems: 6,
+          items: { type: "string" },
+        },
+        recommended_next_actions: {
+          type: "array",
+          minItems: 3,
+          maxItems: 6,
+          items: { type: "string" },
+        },
+        suggested_follow_up_prompts: {
+          type: "array",
+          minItems: 3,
+          maxItems: 3,
+          items: { type: "string" },
+        },
+      },
+    },
     campaign_url: { type: "string", format: "uri" },
   },
 };
@@ -361,7 +394,7 @@ const manifest = {
   slug: "buyable",
   display_name: "Buyable",
   description:
-    "Give Codex the acquisition intelligence to find, prove and pursue the best private businesses to buy.",
+    "Buyable gives Codex an acquisition team in one action: it scans 2,500 private businesses, ranks the best targets for your budget, explains why #1 wins, models financing and prepares the Deal Pack. Try: “Use Buyable to find the best service business around Lyon I can acquire with €250,000.”",
   presentation: {
     action: "Curate acquisition targets",
     input: {

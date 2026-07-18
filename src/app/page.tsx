@@ -53,6 +53,9 @@ export default function Home() {
         <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-4 lg:px-8">
           <BrandMark />
           <div className="hidden items-center gap-7 text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:flex">
+            <a href="#use-with-codex" className="hover:text-foreground">
+              Use with Codex
+            </a>
             <a href="#how-it-works" className="hover:text-foreground">
               How it works
             </a>
@@ -204,6 +207,88 @@ export default function Home() {
             <div className="flex items-center justify-between border-t border-foreground px-4 py-3 text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
               <span>Synthetic hackathon demonstration data</span>
               <span className="text-primary">Open analysis ↗</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="use-with-codex"
+        className="mx-auto max-w-[1440px] border-x border-t border-border"
+      >
+        <div className="grid border-b border-border lg:grid-cols-[.72fr_1.28fr]">
+          <div className="border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r lg:p-14">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-primary">
+              Native to the conversation
+            </p>
+            <h2 className="font-display mt-5 text-5xl leading-none sm:text-6xl">
+              The answer appears in Codex.
+            </h2>
+            <p className="mt-7 max-w-lg text-sm leading-7 text-muted-foreground">
+              The dashboard is the proof layer—not the only result. Buyable
+              gives Codex a complete recommendation, the decisive evidence,
+              financing logic, next actions and prompts to continue the
+              acquisition work.
+            </p>
+          </div>
+
+          <div className="bg-card p-4 sm:p-8 lg:p-10">
+            <div className="border border-foreground bg-background">
+              <div className="flex items-center justify-between border-b border-foreground px-4 py-3">
+                <span className="text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                  Recommended prompt
+                </span>
+                <span className="size-3 border border-foreground bg-primary" />
+              </div>
+              <p className="p-5 text-sm leading-7 sm:p-7 sm:text-base">
+                “Use Buyable to find the best recurring-revenue HVAC and
+                plumbing businesses around Lyon that I could acquire with
+                €250,000. Rank the top 10, explain why #1 wins, stress-test the
+                financing and tell me what I should verify first.”
+              </p>
+              <div className="grid border-t border-border sm:grid-cols-3">
+                {[
+                  [
+                    "01 · Ask",
+                    "Describe your budget, geography, sectors and buyer profile in Codex.",
+                  ],
+                  [
+                    "02 · Analyze",
+                    "Ginse invokes Buyable to scan, score, compare and package the targets.",
+                  ],
+                  [
+                    "03 · Continue",
+                    "Read the answer in Codex, ask follow-ups or open the evidence dashboard.",
+                  ],
+                ].map(([title, text]) => (
+                  <div
+                    key={title}
+                    className="border-b border-border p-5 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0"
+                  >
+                    <p className="text-[9px] uppercase tracking-[0.14em] text-primary">
+                      {title}
+                    </p>
+                    <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                      {text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col justify-between gap-4 border-t border-foreground p-4 sm:flex-row sm:items-center">
+                <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+                  Answer in Codex · Evidence in dashboard · €0.99
+                </p>
+                <Button asChild size="sm">
+                  <a
+                    href="https://app.ginse.ai/elibenbaruk-cd9272/buyable"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open Buyable on Ginse
+                    <ArrowRight className="size-3.5" />
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

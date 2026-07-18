@@ -15,6 +15,7 @@ import {
   type AcquisitionInput,
   type AcquisitionSignal,
   type CampaignOutput,
+  type CodexResponse,
   type FinancingSnapshot,
   type GeneratedArtifact,
   type MarketFunnel,
@@ -708,6 +709,61 @@ function buildArtifacts(
   }));
 }
 
+function buildCodexResponse(
+  topTarget: QualifiedTarget,
+  runnerUp: QualifiedTarget,
+  funnel: MarketFunnel,
+  financing: FinancingSnapshot,
+  campaignUrl: string,
+  rankingLead: string,
+): CodexResponse {
+  const cleanName = topTarget.name.replace(" — Démo", "");
+  const cleanRunnerUpName = runnerUp.name.replace(" — Démo", "");
+  const valuation = `${topTarget.valuation_range_eur.low.toLocaleString("fr-FR")} €–${topTarget.valuation_range_eur.high.toLocaleString("fr-FR")} €`;
+
+  return {
+    answer_markdown: [
+      "## Your acquisition conviction list is ready",
+      "",
+      `I analyzed **${funnel.universe_scanned.toLocaleString("en-US")} synthetic private businesses** and narrowed them to 10 targets that fit your acquisition thesis.`,
+      "",
+      `### My recommendation: ${cleanName}`,
+      `**${topTarget.conviction_score}/100 conviction · ${topTarget.confidence}% evidence confidence · ${sectorLabels[topTarget.sector]} · ${topTarget.city}**`,
+      "",
+      `${cleanName} ranks first because ${topTarget.why_buy[0]?.toLowerCase() ?? "its economics and buyer fit are stronger than the alternatives"}. ${rankingLead}`,
+      "",
+      `- Estimated revenue: **${topTarget.estimated_financials.revenue_eur.toLocaleString("fr-FR")} €**`,
+      `- Estimated EBITDA: **${topTarget.estimated_financials.ebitda_eur.toLocaleString("fr-FR")} €**`,
+      `- Indicative valuation: **${valuation}**`,
+      `- Balanced financing case: **${financing.buyer_cash_eur.toLocaleString("fr-FR")} € equity + ${financing.senior_debt_eur.toLocaleString("fr-FR")} € senior debt + ${financing.seller_note_eur.toLocaleString("fr-FR")} € seller note + ${financing.earnout_eur.toLocaleString("fr-FR")} € earn-out**`,
+      `- Estimated DSCR: **${financing.estimated_dscr.toFixed(2)}×**`,
+      "",
+      `The closest alternative is **${cleanRunnerUpName}**. Before approaching either company, verify normalized EBITDA, customer concentration, owner responsibilities and willingness to discuss a transition.`,
+      "",
+      `[Open the complete evidence, comparison and Deal Pack](${campaignUrl})`,
+      "",
+      "_Synthetic hackathon demonstration data. Draft analysis only; professional validation is required._",
+    ].join("\n"),
+    key_takeaways: [
+      `${cleanName} is the highest-ranked target at ${topTarget.conviction_score}/100 with ${topTarget.confidence}% evidence confidence.`,
+      `${rankingLead} The ranking remains conditional on the disclosed synthetic evidence.`,
+      `The balanced case produces an estimated ${financing.estimated_dscr.toFixed(2)}× DSCR with ${financing.equity_gap_eur.toLocaleString("fr-FR")} € of equity gap.`,
+      `${topTarget.unknowns.length} material unknowns remain to verify before any indication of interest.`,
+    ],
+    recommended_next_actions: [
+      `Compare ${cleanName} directly with ${cleanRunnerUpName} and identify what could reverse the ranking.`,
+      "Validate normalized EBITDA, recurring revenue, customer concentration and owner dependency.",
+      "Stress-test the balanced offer before preparing a confidential owner approach.",
+      "Review every generated document with legal, tax and financing professionals.",
+    ],
+    suggested_follow_up_prompts: [
+      `Compare ${cleanName} with ${cleanRunnerUpName}. Tell me which risks could reverse the ranking and what evidence I should request first.`,
+      `Stress-test the financing for ${cleanName} if EBITDA is 20% lower, and calculate the maximum enterprise value that keeps DSCR above 1.5×.`,
+      `Use the Buyable Deal Pack to prepare a 30-minute first conversation with the owner of ${cleanName}. Do not send anything.`,
+    ],
+  };
+}
+
 export function canonicalize(value: unknown): string {
   if (value === null || typeof value !== "object") {
     return JSON.stringify(value);
@@ -778,6 +834,15 @@ export function generateCampaign(
   ).replace(/\/$/, "");
   const regionDescription =
     input.region === "France" ? "France" : input.region;
+  const campaignUrl = `${baseUrl}/campaigns/${campaignId}`;
+  const codexResponse = buildCodexResponse(
+    topTarget,
+    runnerUp,
+    funnel,
+    financingSnapshot,
+    campaignUrl,
+    rankingLead,
+  );
 
   const output: CampaignOutput = {
     schema_version: "2",
@@ -809,7 +874,8 @@ export function generateCampaign(
     offer_scenarios: offerScenarios,
     outreach_packet: outreach,
     generated_artifacts: buildArtifacts(topTarget),
-    campaign_url: `${baseUrl}/campaigns/${campaignId}`,
+    codex_response: codexResponse,
+    campaign_url: campaignUrl,
   };
 
   return campaignOutputSchema.parse(output);
