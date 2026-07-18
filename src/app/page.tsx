@@ -241,10 +241,11 @@ export default function Home() {
                 <span className="size-3 border border-foreground bg-primary" />
               </div>
               <p className="p-5 text-sm leading-7 sm:p-7 sm:text-base">
-                “Use Buyable to find the best recurring-revenue HVAC and
-                plumbing businesses around Lyon that I could acquire with
-                €250,000. Rank the top 10, explain why #1 wins, stress-test the
-                financing and tell me what I should verify first.”
+                “Use Ginse app app.ginse.ai/elibenbaruk-cd9272/buyable to find
+                the best recurring-revenue HVAC and plumbing businesses around
+                Lyon that I could acquire with €250,000. Rank the top 10,
+                explain why #1 wins, stress-test the financing and tell me what
+                I should verify first.”
               </p>
               <div className="grid border-t border-border sm:grid-cols-3">
                 {[

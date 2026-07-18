@@ -13,8 +13,9 @@ complete Deal Pack for the strongest opportunity.
 
 Ask Codex:
 
-> Use Buyable to find the best HVAC and plumbing businesses around Lyon that I
-> could acquire with €250,000 of cash.
+> Use Ginse app app.ginse.ai/elibenbaruk-cd9272/buyable to find the best HVAC
+> and plumbing businesses around Lyon that I could acquire with €250,000 of
+> cash.
 
 Buyable returns:
 

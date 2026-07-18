@@ -394,7 +394,7 @@ const manifest = {
   slug: "buyable",
   display_name: "Buyable",
   description:
-    "Buyable gives Codex an acquisition team in one action: it scans 2,500 private businesses, ranks the best targets for your budget, explains why #1 wins, models financing and prepares the Deal Pack. Try: “Use Buyable to find the best service business around Lyon I can acquire with €250,000.”",
+    "Buyable gives Codex an acquisition team in one action: it scans 2,500 private businesses, ranks the best targets for your budget, explains why #1 wins, models financing and prepares the Deal Pack. Try in Codex: “Use Ginse app app.ginse.ai/elibenbaruk-cd9272/buyable to find the best service business around Lyon I can acquire with €250,000.”",
   presentation: {
     action: "Curate acquisition targets",
     input: {
