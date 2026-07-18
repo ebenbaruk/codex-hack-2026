@@ -1,8 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import { Instrument_Serif, Inter_Tight } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
+
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  variable: "--font-inter-tight",
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +32,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#0b0d0c",
+  themeColor: "#161616",
 };
 
 export default function RootLayout({
@@ -30,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} dark h-full antialiased`}
+      className={`${interTight.variable} ${instrumentSerif.variable} dark h-full antialiased`}
     >
       <body className="min-h-full bg-background font-sans text-foreground">
         <TooltipProvider>{children}</TooltipProvider>

@@ -13,16 +13,15 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
     >
       <span
         className={cn(
-          "flex items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:rotate-6",
+          "flex items-center justify-center border border-primary bg-primary text-primary-foreground transition-colors group-hover:border-foreground group-hover:bg-foreground group-hover:text-background",
           compact ? "size-7" : "size-8",
         )}
       >
         <Crosshair className={compact ? "size-3.5" : "size-4"} strokeWidth={2.4} />
       </span>
-      <span>
-        buyable<span className="text-primary">.</span>
+      <span className="uppercase tracking-[0.02em]">
+        buyable<span className="text-primary">/</span>
       </span>
     </Link>
   );
 }
-

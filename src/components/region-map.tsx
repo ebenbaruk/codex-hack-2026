@@ -23,7 +23,7 @@ export function RegionMap({
   onSelect: (id: string) => void;
 }) {
   return (
-    <div className="relative aspect-[1.25/1] overflow-hidden rounded-xl border border-border bg-[#0d110f]">
+    <div className="relative aspect-[1.25/1] overflow-hidden border border-foreground bg-background">
       <svg
         viewBox="0 0 600 480"
         className="absolute inset-0 size-full opacity-80"
@@ -43,29 +43,25 @@ export function RegionMap({
               strokeWidth="1"
             />
           </pattern>
-          <linearGradient id="france-fill" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="rgba(186,255,68,.15)" />
-            <stop offset="100%" stopColor="rgba(186,255,68,.025)" />
-          </linearGradient>
         </defs>
         <rect width="600" height="480" fill="url(#france-map-grid)" />
         <path
           d="M204 54 L273 64 L323 48 L382 78 L430 72 L469 115 L501 156 L485 208 L514 251 L484 302 L452 344 L399 363 L367 415 L316 421 L281 387 L232 382 L206 337 L157 315 L143 260 L104 222 L126 172 L116 122 L161 94 Z"
-          fill="url(#france-fill)"
-          stroke="rgba(186,255,68,.3)"
-          strokeWidth="2"
+          fill="rgba(255,90,31,.08)"
+          stroke="rgba(255,90,31,.7)"
+          strokeWidth="1"
         />
         <path
           d="M466 385 C480 375 493 381 494 401 C495 424 483 451 470 456 C459 445 458 404 466 385 Z"
-          fill="url(#france-fill)"
-          stroke="rgba(186,255,68,.25)"
-          strokeWidth="1.5"
+          fill="rgba(255,90,31,.08)"
+          stroke="rgba(255,90,31,.7)"
+          strokeWidth="1"
         />
         <path
           d="M154 282 C244 246 313 230 403 246 C443 254 472 239 497 215"
           fill="none"
-          stroke="rgba(108,159,255,.2)"
-          strokeWidth="3"
+          stroke="rgba(241,241,241,.12)"
+          strokeWidth="1"
           strokeDasharray="5 8"
         />
         <text
@@ -79,7 +75,7 @@ export function RegionMap({
         </text>
       </svg>
 
-      <div className="absolute left-4 top-4 rounded-lg border border-white/10 bg-black/45 px-3 py-2 backdrop-blur">
+      <div className="absolute left-4 top-4 border border-border bg-background px-3 py-2">
         <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
           Conviction density
         </p>
@@ -99,21 +95,18 @@ export function RegionMap({
             onClick={() => onSelect(target.id)}
             style={position(target)}
             className={cn(
-              "group absolute z-10 -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110",
-              selected && "z-20 scale-110",
+              "group absolute z-10 -translate-x-1/2 -translate-y-1/2 transition-colors",
+              selected && "z-20",
             )}
           >
             <span
               className={cn(
-                "relative flex size-7 items-center justify-center rounded-full border bg-background shadow-lg transition-colors",
+                "relative flex size-7 items-center justify-center border bg-background transition-colors",
                 selected
-                  ? "border-primary bg-primary text-primary-foreground shadow-primary/20"
-                  : "border-white/20 text-muted-foreground group-hover:border-primary/60 group-hover:text-primary",
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border text-muted-foreground group-hover:border-foreground group-hover:bg-foreground group-hover:text-background",
               )}
             >
-              {selected && (
-                <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-primary/30" />
-              )}
               {index === 0 ? (
                 <MapPin className="size-3.5" fill="currentColor" />
               ) : (
@@ -127,7 +120,7 @@ export function RegionMap({
       })}
 
       <div className="absolute bottom-4 left-4 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
-        <span className="size-2 rounded-full bg-primary" />
+        <span className="size-2 bg-primary" />
         Click a target to inspect
       </div>
     </div>

@@ -2,21 +2,16 @@ import Link from "next/link";
 import {
   ArrowRight,
   Banknote,
-  Bot,
   Building2,
   Check,
-  CircleDot,
   Database,
   FileCheck2,
   Radar,
   Search,
-  ShieldCheck,
-  Sparkles,
   Target,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { BrandMark } from "@/components/brand-mark";
 import { demoCampaign } from "@/lib/buyable/engine";
 import { sectorLabels } from "@/lib/buyable/data";
@@ -24,296 +19,307 @@ import { sectorLabels } from "@/lib/buyable/data";
 const previewTargets = demoCampaign.targets.slice(0, 3);
 const funnel = demoCampaign.market_funnel;
 
+const process = [
+  {
+    icon: Database,
+    number: "01",
+    title: "Scan the private market",
+    text: "Search thousands of businesses, including companies that are not listed for sale.",
+  },
+  {
+    icon: Radar,
+    number: "02",
+    title: "Build the evidence",
+    text: "Structure financial, operating, transition and contact signals for every candidate.",
+  },
+  {
+    icon: Target,
+    number: "03",
+    title: "Defend the ranking",
+    text: "Explain every elimination and why the first target beats the alternatives.",
+  },
+  {
+    icon: FileCheck2,
+    number: "04",
+    title: "Prepare the acquisition",
+    text: "Generate financing scenarios, outreach, a lender memo, LOI and diligence plan.",
+  },
+] as const;
+
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-background">
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(186,255,68,0.12),transparent_38%)]" />
-      <nav className="relative z-20 mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
-        <BrandMark />
-        <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a href="#how-it-works" className="transition-colors hover:text-foreground">
-            How it works
-          </a>
-          <a href="#conviction" className="transition-colors hover:text-foreground">
-            Conviction engine
-          </a>
-          <Badge
-            variant="outline"
-            className="border-primary/30 bg-primary/5 text-primary"
-          >
-            Ginse Hackathon
-          </Badge>
+    <main className="min-h-screen bg-background">
+      <nav className="border-b border-foreground">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-4 lg:px-8">
+          <BrandMark />
+          <div className="hidden items-center gap-7 text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:flex">
+            <a href="#how-it-works" className="hover:text-foreground">
+              How it works
+            </a>
+            <a href="#conviction" className="hover:text-foreground">
+              Conviction engine
+            </a>
+            <span className="text-primary">Ginse Hackathon</span>
+          </div>
+          <Button asChild size="sm">
+            <Link href="/campaigns/demo-lyon-services">
+              Open demo
+              <ArrowRight className="size-3.5" />
+            </Link>
+          </Button>
         </div>
-        <Button asChild size="sm" className="rounded-full">
-          <Link href="/campaigns/demo-lyon-services">
-            Live conviction list
-            <ArrowRight className="size-4" />
-          </Link>
-        </Button>
       </nav>
 
-      <section className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-24 pt-20 lg:grid-cols-[1.02fr_.98fr] lg:px-8 lg:pb-32 lg:pt-28">
-        <div>
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/6 px-3 py-1.5 text-xs font-medium text-primary">
-            <Bot className="size-3.5" />
-            Acquisition intelligence for Codex
-          </div>
-          <h1 className="max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-foreground sm:text-6xl lg:text-[5.1rem]">
-            Know which business{" "}
-            <span className="text-primary">is worth buying.</span>
-          </h1>
-          <p className="mt-7 max-w-xl text-balance text-lg leading-8 text-muted-foreground">
-            Buyable lets Codex scan the private market, prove why a target wins,
-            and prepare the financing, seller approach and acquisition documents.
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="h-12 rounded-full px-6">
-              <Link href="/campaigns/demo-lyon-services">
-                Explore the killer demo
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <div className="flex h-12 items-center gap-2 px-4 text-sm text-muted-foreground">
-              <ShieldCheck className="size-4 text-primary" />
-              €0.99 hackathon test balance
+      <section className="mx-auto grid max-w-[1440px] border-x border-border lg:grid-cols-[1.08fr_.92fr]">
+        <div className="flex min-h-[680px] flex-col justify-between border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r lg:p-14">
+          <div>
+            <p className="mb-9 text-[11px] uppercase tracking-[0.18em] text-primary">
+              Acquisition intelligence for Codex
+            </p>
+            <h1 className="font-display max-w-4xl text-[3.6rem] leading-[0.9] tracking-[-0.035em] sm:text-[5rem] lg:text-[6.2rem]">
+              Know which business{" "}
+              <em className="font-normal text-primary">is worth buying.</em>
+            </h1>
+            <p className="mt-8 max-w-xl text-base leading-7 text-muted-foreground">
+              Buyable gives Codex the private-market data, evidence and financial
+              tools required to find, compare and prepare the acquisition of a
+              business.
+            </p>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg" className="h-11 px-5">
+                <Link href="/campaigns/demo-lyon-services">
+                  Explore the killer demo
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <div className="flex h-11 items-center border border-border px-4 text-xs text-muted-foreground">
+                €0.99 · Hackathon test balance
+              </div>
             </div>
           </div>
-          <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <Check className="size-3.5 text-primary" /> 2,500 businesses scanned
-            </span>
-            <span className="flex items-center gap-2">
-              <Check className="size-3.5 text-primary" /> Every rank explained
-            </span>
-            <span className="flex items-center gap-2">
-              <Check className="size-3.5 text-primary" /> Deal Pack generated
-            </span>
+
+          <div className="mt-16 grid gap-px border border-border bg-border sm:grid-cols-3">
+            {[
+              "2,500 businesses scanned",
+              "Every rank explained",
+              "Deal Pack generated",
+            ].map((item) => (
+              <div
+                key={item}
+                className="flex items-center gap-2 bg-background px-4 py-3 text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+              >
+                <Check className="size-3 text-primary" />
+                {item}
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="relative">
-          <div className="absolute -inset-8 rounded-full bg-primary/8 blur-3xl" />
-          <Card className="relative overflow-hidden border-white/10 bg-card/88 shadow-2xl shadow-black/40 backdrop-blur">
-            <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <div className="flex items-center gap-2">
-                <span className="size-2.5 rounded-full bg-[#ff625f]" />
-                <span className="size-2.5 rounded-full bg-[#f3bd4f]" />
-                <span className="size-2.5 rounded-full bg-primary" />
+        <div className="flex min-h-[680px] items-center bg-card p-4 sm:p-8 lg:p-10">
+          <div className="w-full border border-foreground bg-background">
+            <div className="flex h-9 items-center justify-between border-b border-foreground px-3">
+              <div className="flex items-center gap-1.5">
+                <span className="size-3 border border-foreground bg-primary" />
+                <span className="size-3 border border-foreground" />
+                <span className="size-3 border border-foreground" />
               </div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
                 Codex → Ginse → Buyable
               </span>
             </div>
-            <CardContent className="p-0">
-              <div className="border-b border-border bg-black/20 p-5 font-mono text-sm leading-6">
-                <span className="text-primary">›</span>{" "}
-                <span className="text-foreground">
-                  Find the best HVAC and plumbing businesses around Lyon that I
-                  could acquire with €250,000.
-                </span>
-              </div>
-              <div className="grid grid-cols-5 border-b border-border bg-primary/[0.035]">
-                {[
-                  [funnel.universe_scanned, "scanned"],
-                  [funnel.thesis_compatible, "thesis"],
-                  [funnel.economically_solid, "quality"],
-                  [funnel.financeable, "finance"],
-                  [funnel.conviction_list, "top"],
-                ].map(([value, label]) => (
-                  <div
-                    key={label}
-                    className="border-r border-border px-2 py-3 text-center last:border-0"
-                  >
-                    <p className="font-mono text-sm font-semibold text-primary">
-                      {value}
-                    </p>
-                    <p className="mt-1 text-[7px] uppercase tracking-wider text-muted-foreground">
-                      {label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-3 p-4">
-                <div className="flex items-center justify-between px-2 py-1 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                  <span>Acquisition conviction list</span>
-                  <span>10 ranked · under 3s</span>
-                </div>
-                {previewTargets.map((target, index) => (
-                  <div
-                    key={target.id}
-                    className={`group flex items-center gap-4 rounded-xl border p-4 ${
-                      index === 0
-                        ? "border-primary/35 bg-primary/[0.07]"
-                        : "border-border bg-background/35"
-                    }`}
-                  >
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background font-mono text-sm text-muted-foreground">
-                      0{index + 1}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="truncate text-sm font-medium">{target.name}</p>
-                        {index === 0 && (
-                          <Badge className="h-5 bg-primary/12 px-1.5 text-[9px] text-primary">
-                            WHY #1
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {target.city} · {sectorLabels[target.sector]} ·{" "}
-                        {(target.estimated_financials.revenue_eur / 1_000_000).toFixed(1)}M€
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-mono text-xl font-semibold text-primary">
-                        {target.conviction_score}
-                      </p>
-                      <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
-                        conviction
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center justify-between border-t border-border bg-primary/[0.04] px-6 py-4 text-xs">
-                <span className="flex items-center gap-2 text-muted-foreground">
-                  <CircleDot className="size-3 text-primary" />
-                  Synthetic hackathon demonstration data
-                </span>
-                <span className="font-mono text-primary">OPEN ANALYSIS ↗</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
-      <section id="how-it-works" className="relative border-y border-border bg-card/25">
-        <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8">
-          <div className="mb-14 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-primary">
-                From private market to actionable deal
-              </p>
-              <h2 className="max-w-2xl text-4xl font-semibold tracking-[-0.04em]">
-                One prompt. The work of an acquisition team.
-              </h2>
+            <div className="border-b border-border p-5 text-sm leading-6">
+              <span className="mr-2 text-primary">›</span>
+              Find the best HVAC and plumbing businesses around Lyon that I
+              could acquire with €250,000.
             </div>
-            <p className="max-w-md text-sm leading-6 text-muted-foreground">
-              Codex remains the intelligence. Buyable supplies the market universe,
-              evidence graph, financial calculations and persistent deal artifacts.
-            </p>
-          </div>
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
-            {[
-              {
-                icon: Database,
-                number: "01",
-                title: "Scan the market",
-                text: "Search private businesses, including companies not listed for sale.",
-              },
-              {
-                icon: Radar,
-                number: "02",
-                title: "Build the evidence",
-                text: "Reconstruct financial, operating, contact and transition profiles.",
-              },
-              {
-                icon: Target,
-                number: "03",
-                title: "Prove the ranking",
-                text: "Explain every elimination and why #1 beats every alternative.",
-              },
-              {
-                icon: FileCheck2,
-                number: "04",
-                title: "Prepare the deal",
-                text: "Generate offer structures, outreach, lender memo, LOI and diligence.",
-              },
-            ].map((step) => (
-              <div key={step.number} className="bg-background p-7">
-                <div className="mb-12 flex items-center justify-between">
-                  <step.icon className="size-5 text-primary" />
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {step.number}
-                  </span>
+
+            <div className="grid grid-cols-5 border-b border-border">
+              {[
+                [funnel.universe_scanned, "scanned"],
+                [funnel.thesis_compatible, "thesis"],
+                [funnel.economically_solid, "quality"],
+                [funnel.financeable, "finance"],
+                [funnel.conviction_list, "top"],
+              ].map(([value, label]) => (
+                <div
+                  key={label}
+                  className="border-r border-border px-1 py-3 text-center last:border-r-0"
+                >
+                  <p className="number-tabular text-sm text-primary">{value}</p>
+                  <p className="mt-1 text-[7px] uppercase tracking-[0.1em] text-muted-foreground">
+                    {label}
+                  </p>
                 </div>
-                <h3 className="font-medium">{step.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {step.text}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between border-b border-border px-4 py-3 text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+              <span>Acquisition conviction list</span>
+              <span>10 ranked · under 3 sec</span>
+            </div>
+
+            <div>
+              {previewTargets.map((target, index) => (
+                <div
+                  key={target.id}
+                  className="grid grid-cols-[34px_1fr_auto] items-center gap-3 border-b border-border p-4 last:border-b-0"
+                >
+                  <span
+                    className={
+                      index === 0
+                        ? "flex size-8 items-center justify-center border border-primary bg-primary text-xs text-primary-foreground"
+                        : "flex size-8 items-center justify-center border border-border text-xs text-muted-foreground"
+                    }
+                  >
+                    0{index + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm">{target.name}</p>
+                      {index === 0 ? (
+                        <Badge variant="outline">Why #1</Badge>
+                      ) : null}
+                    </div>
+                    <p className="mt-1 text-[10px] text-muted-foreground">
+                      {target.city} · {sectorLabels[target.sector]} ·{" "}
+                      {(
+                        target.estimated_financials.revenue_eur / 1_000_000
+                      ).toFixed(1)}
+                      M€
+                    </p>
+                  </div>
+                  <div className="border-l border-border pl-4 text-right">
+                    <p className="number-tabular text-xl text-primary">
+                      {target.conviction_score}
+                    </p>
+                    <p className="text-[8px] uppercase tracking-[0.1em] text-muted-foreground">
+                      score
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between border-t border-foreground px-4 py-3 text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+              <span>Synthetic hackathon demonstration data</span>
+              <span className="text-primary">Open analysis ↗</span>
+            </div>
           </div>
         </div>
       </section>
 
       <section
-        id="conviction"
-        className="relative mx-auto max-w-7xl px-5 py-24 lg:px-8"
+        id="how-it-works"
+        className="mx-auto max-w-[1440px] border-x border-t border-border bg-background"
       >
-        <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
-          <div>
-            <Badge variant="outline" className="mb-5 border-primary/25 text-primary">
-              Conviction, not leads
-            </Badge>
-            <h2 className="text-4xl font-semibold tracking-[-0.04em]">
-              “Best” has to be defensible.
-            </h2>
-            <p className="mt-5 text-base leading-7 text-muted-foreground">
-              Buyable separates company quality, buyer fit, financeability,
-              operating transferability and observable transition evidence. It
-              also shows confidence and unknowns separately.
+        <div className="grid border-b border-border lg:grid-cols-[.75fr_1.25fr]">
+          <div className="border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r lg:p-14">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-primary">
+              One request
             </p>
-            <Button asChild variant="outline" className="mt-8 rounded-full">
-              <Link href="/campaigns/demo-lyon-services">
-                Inspect Why #1 wins
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
+            <h2 className="font-display mt-5 text-5xl leading-none sm:text-6xl">
+              The work of an acquisition team.
+            </h2>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              {
-                icon: Search,
-                title: "Market funnel",
-                text: "See exactly how 2,500 companies become ten conviction targets.",
-              },
-              {
-                icon: Building2,
-                title: "Evidence graph",
-                text: "Facts, bounded inferences, provenance and critical unknowns.",
-              },
-              {
-                icon: Banknote,
-                title: "Live financeability",
-                text: "Change buyer cash and watch the ranking and offer structures move.",
-              },
-              {
-                icon: Sparkles,
-                title: "Acquisition Deal Pack",
-                text: "Investment memo, seller approach, financing, LOI and 100-day plan.",
-              },
-            ].map((item) => (
-              <Card key={item.title} className="bg-card/50">
-                <CardContent className="p-6">
-                  <item.icon className="mb-8 size-5 text-primary" />
-                  <h3 className="text-sm font-medium">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                    {item.text}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="flex items-end p-6 sm:p-10 lg:p-14">
+            <p className="max-w-xl text-sm leading-7 text-muted-foreground">
+              Codex remains the intelligence. Buyable supplies the structured
+              market universe, evidence, calculations and durable deal
+              artifacts that Codex cannot create alone.
+            </p>
           </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 xl:grid-cols-4">
+          {process.map((step, index) => (
+            <article
+              key={step.number}
+              className="min-h-72 border-b border-border p-6 md:border-r md:p-8 xl:border-b-0 xl:last:border-r-0"
+            >
+              <div className="flex items-center justify-between">
+                <step.icon className="size-4 text-primary" />
+                <span className="text-[10px] text-muted-foreground">
+                  {step.number}
+                </span>
+              </div>
+              <h3 className="mt-20 text-lg">{step.title}</h3>
+              <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                {step.text}
+              </p>
+              {index < process.length - 1 ? (
+                <ArrowRight className="mt-8 size-4 text-border" />
+              ) : null}
+            </article>
+          ))}
         </div>
       </section>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-5 py-8 text-xs text-muted-foreground sm:flex-row sm:items-center lg:px-8">
-          <BrandMark compact />
-          <p>Buyable · Acquisition intelligence for Codex</p>
-          <p>Synthetic data · Drafts only · No outreach sent</p>
+      <section
+        id="conviction"
+        className="mx-auto grid max-w-[1440px] border border-border lg:grid-cols-2"
+      >
+        <div className="border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r lg:p-14">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-primary">
+            Conviction, not leads
+          </p>
+          <h2 className="font-display mt-5 max-w-xl text-5xl leading-none sm:text-6xl">
+            “Best” has to be defensible.
+          </h2>
+          <p className="mt-7 max-w-lg text-sm leading-7 text-muted-foreground">
+            Buyable separates company quality, buyer fit, financeability,
+            transferability and observable transition evidence. Confidence,
+            facts, inferences and unknowns remain separate.
+          </p>
+          <Button asChild variant="outline" className="mt-9">
+            <Link href="/campaigns/demo-lyon-services">
+              Inspect why #1 wins
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
         </div>
+
+        <div className="grid sm:grid-cols-2">
+          {[
+            {
+              icon: Search,
+              title: "Market funnel",
+              text: "See exactly how 2,500 companies become ten conviction targets.",
+            },
+            {
+              icon: Building2,
+              title: "Evidence graph",
+              text: "Facts, bounded inferences, provenance and critical unknowns.",
+            },
+            {
+              icon: Banknote,
+              title: "Live financeability",
+              text: "Change buyer cash and watch rankings and offer structures move.",
+            },
+            {
+              icon: FileCheck2,
+              title: "Acquisition Deal Pack",
+              text: "Investment memo, seller approach, financing, LOI and 100-day plan.",
+            },
+          ].map((item) => (
+            <article
+              key={item.title}
+              className="min-h-56 border-b border-border p-6 odd:border-r sm:p-8"
+            >
+              <item.icon className="size-4 text-primary" />
+              <h3 className="mt-14 text-base">{item.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                {item.text}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <footer className="mx-auto flex max-w-[1440px] flex-col justify-between gap-4 border-x border-b border-border px-5 py-7 text-[10px] uppercase tracking-[0.12em] text-muted-foreground sm:flex-row sm:items-center lg:px-8">
+        <BrandMark compact />
+        <p>Buyable · Acquisition intelligence for Codex</p>
+        <p>Synthetic data · Drafts only · No outreach sent</p>
       </footer>
     </main>
   );

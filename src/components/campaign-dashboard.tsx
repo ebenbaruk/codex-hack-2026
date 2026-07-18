@@ -96,35 +96,10 @@ const funnelLabels = [
 ] as const;
 
 function ScoreRing({ score }: { score: number }) {
-  const radius = 30;
-  const circumference = 2 * Math.PI * radius;
-  const dash = (score / 100) * circumference;
-
   return (
-    <div className="relative size-[76px] shrink-0">
-      <svg viewBox="0 0 72 72" className="size-full -rotate-90" aria-hidden="true">
-        <circle
-          cx="36"
-          cy="36"
-          r={radius}
-          fill="none"
-          stroke="rgba(255,255,255,.08)"
-          strokeWidth="5"
-        />
-        <circle
-          cx="36"
-          cy="36"
-          r={radius}
-          fill="none"
-          stroke="var(--primary)"
-          strokeWidth="5"
-          strokeLinecap="round"
-          strokeDasharray={`${dash} ${circumference - dash}`}
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center font-mono text-xl font-semibold text-primary">
-        {score}
-      </div>
+    <div className="flex size-[76px] shrink-0 flex-col items-center justify-center border border-primary bg-primary text-primary-foreground">
+      <span className="number-tabular text-2xl">{score}</span>
+      <span className="text-[8px] uppercase tracking-[0.12em]">of 100</span>
     </div>
   );
 }
@@ -141,7 +116,7 @@ function MetricCard({
   note: string;
 }) {
   return (
-    <Card className="bg-card/55">
+    <Card className="bg-card">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <p className="text-xs text-muted-foreground">{label}</p>
@@ -160,16 +135,16 @@ function MetricCard({
 
 function EvidenceCard({ evidence }: { evidence: EvidenceSignal }) {
   return (
-    <div className="rounded-xl border border-border bg-background/40 p-4">
+    <div className="border border-border bg-background p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <span
             className={cn(
-              "mt-1 size-2 rounded-full",
+              "mt-1 size-2",
               evidence.strength === "strong"
                 ? "bg-primary"
                 : evidence.strength === "medium"
-                  ? "bg-amber-400"
+                  ? "bg-foreground"
                   : "bg-muted-foreground",
             )}
           />
@@ -220,7 +195,7 @@ function TargetRow({
     >
       <span
         className={cn(
-          "flex size-7 items-center justify-center rounded-md border font-mono text-[10px]",
+          "flex size-7 items-center justify-center border text-[10px]",
           selected
             ? "border-primary/40 bg-primary/10 text-primary"
             : "border-border text-muted-foreground",
@@ -232,7 +207,7 @@ function TargetRow({
         <span className="flex items-center gap-2">
           <span className="truncate text-sm font-medium">{target.name}</span>
           {rank === 1 && (
-            <Badge className="h-4 rounded px-1 text-[8px] text-primary">
+            <Badge className="h-4 px-1 text-[8px] text-primary">
               CONVICTION
             </Badge>
           )}
@@ -277,7 +252,7 @@ function ListCard({
   tone?: "primary" | "warning" | "neutral";
 }) {
   return (
-    <Card className="bg-card/45">
+    <Card className="bg-card">
       <CardContent className="p-4">
         <p className="flex items-center gap-2 text-xs font-medium">
           <Icon
@@ -286,8 +261,8 @@ function ListCard({
               tone === "primary"
                 ? "text-primary"
                 : tone === "warning"
-                  ? "text-amber-300"
-                  : "text-blue-300",
+                  ? "text-primary"
+                  : "text-muted-foreground",
             )}
           />
           {title}
@@ -350,8 +325,8 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
 
   return (
     <main className="min-h-screen bg-background">
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 lg:px-6">
+      <nav className="sticky top-0 z-50 border-b border-foreground bg-background">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between border-x border-border px-4 lg:px-6">
           <div className="flex items-center gap-5">
             <BrandMark />
             <Separator orientation="vertical" className="hidden h-5 md:block" />
@@ -376,14 +351,13 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
             <CopyButton
               value={campaign.campaign_url}
               label="Share campaign"
-              className="rounded-full"
             />
           </div>
         </div>
       </nav>
 
-      <div className="border-b border-amber-400/15 bg-amber-400/[0.045]">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-2.5 text-[10px] uppercase tracking-[0.14em] text-amber-200/75 lg:px-6">
+      <div className="border-b border-primary bg-background">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 border-x border-border px-4 py-2.5 text-[10px] uppercase tracking-[0.14em] text-primary lg:px-6">
           <span className="flex items-center gap-2">
             <CircleAlert className="size-3.5" />
             {campaign.disclosure}
@@ -394,7 +368,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1600px] px-4 py-6 lg:px-6 lg:py-8">
+      <div className="mx-auto max-w-[1440px] border-x border-border px-4 py-6 lg:px-6 lg:py-8">
         <header className="flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
           <div>
             <Link
@@ -405,7 +379,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
               Back to Buyable
             </Link>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">
+              <h1 className="font-display text-4xl font-normal tracking-[-0.025em] sm:text-5xl">
                 Acquisition conviction list
               </h1>
               <Badge className="bg-primary/10 text-primary">ANALYSIS COMPLETE</Badge>
@@ -429,7 +403,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
 
         <section
           aria-label="Market qualification funnel"
-          className="mt-7 grid overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 xl:grid-cols-6"
+          className="mt-7 grid grid-cols-2 overflow-hidden border border-foreground bg-border sm:grid-cols-3 xl:grid-cols-6"
         >
           {funnelLabels.map(([key, label], index) => (
             <div
@@ -486,7 +460,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
         </section>
 
         <section className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.08fr)_minmax(420px,.92fr)]">
-          <Card className="overflow-hidden bg-card/50">
+          <Card className="overflow-hidden bg-card">
             <CardHeader className="flex-row items-center justify-between border-b border-border py-4">
               <div>
                 <CardTitle className="text-sm">Buyability ranking</CardTitle>
@@ -532,7 +506,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   ].map(([label, value]) => (
                     <div
                       key={label}
-                      className="rounded-lg border border-border bg-background/30 p-3"
+                      className="border border-border bg-background p-3"
                     >
                       <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
                         {label}
@@ -548,14 +522,14 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
           </Card>
 
           <div className="space-y-5">
-            <Card className="border-primary/20 bg-primary/[0.045]">
+            <Card className="border-primary bg-card">
               <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-5">
                   <div>
                     <Badge className="mb-3 bg-primary/10 text-primary">
                       WHY #{selectedRank}
                     </Badge>
-                    <h2 className="text-2xl font-semibold tracking-[-0.035em]">
+                    <h2 className="font-display text-3xl font-normal tracking-[-0.02em]">
                       {selected.name}
                     </h2>
                     <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
@@ -567,7 +541,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   </div>
                   <ScoreRing score={selected.conviction_score} />
                 </div>
-                <p className="mt-5 rounded-xl border border-primary/15 bg-background/30 p-4 text-sm leading-6 text-muted-foreground">
+                <p className="mt-5 border-l border-primary bg-background p-4 text-sm leading-6 text-muted-foreground">
                   {selected.rank_explanation}
                 </p>
                 <div className="mt-4 space-y-2">
@@ -584,13 +558,13 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
               </CardContent>
             </Card>
 
-            <Card className="bg-card/50">
+            <Card className="bg-card">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-sm">
                   <SlidersHorizontal className="size-4 text-primary" />
                   Live buyer-cash simulation
                   {isSimulated && (
-                    <Badge className="ml-auto bg-blue-400/10 text-blue-300">
+                    <Badge className="ml-auto border-primary bg-primary text-primary-foreground">
                       WHAT-IF
                     </Badge>
                   )}
@@ -652,7 +626,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   ].map(([label, value]) => (
                     <div
                       key={label}
-                      className="rounded-lg border border-border bg-background/30 p-3"
+                      className="border border-border bg-background p-3"
                     >
                       <p className="font-mono text-sm font-semibold">{value}</p>
                       <p className="mt-1 text-[8px] uppercase tracking-wider text-muted-foreground">
@@ -667,7 +641,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
         </section>
 
         <section className="mt-6 grid gap-5 lg:grid-cols-[1.15fr_.85fr]">
-          <Card className="bg-card/50">
+          <Card className="bg-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-sm">
                 <Sparkles className="size-4 text-primary" />
@@ -679,7 +653,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                 (reason, index) => (
                   <div
                     key={reason}
-                    className="flex gap-3 rounded-xl border border-border bg-background/35 p-4"
+                    className="flex gap-3 border border-border bg-background p-4"
                   >
                     <span className="font-mono text-xs text-primary">
                       0{index + 1}
@@ -695,7 +669,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-card/50">
+          <Card className="bg-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-sm">
                 <Search className="size-4 text-primary" />
@@ -740,7 +714,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     <TabsTrigger
                       key={value}
                       value={value}
-                      className="h-11 rounded-none px-4"
+                      className="h-11 px-4"
                     >
                       {label}
                     </TabsTrigger>
@@ -770,7 +744,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                 />
               </div>
               <div className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
-                <Card className="bg-card/50">
+                <Card className="bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <Gauge className="size-4 text-primary" />
@@ -802,7 +776,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     )}
                   </CardContent>
                 </Card>
-                <Card className="bg-card/50">
+                <Card className="bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <Users className="size-4 text-primary" />
@@ -813,7 +787,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     {selected.contact_paths.map((contact) => (
                       <div
                         key={`${contact.channel}-${contact.value}`}
-                        className="flex items-center justify-between gap-4 rounded-lg border border-border bg-background/30 p-3"
+                        className="flex items-center justify-between gap-4 border border-border bg-background p-3"
                       >
                         <div className="min-w-0">
                           <p className="text-xs font-medium">{contact.role}</p>
@@ -831,7 +805,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
 
             <TabsContent value="economics" className="mt-5">
               <div className="grid gap-5 lg:grid-cols-[1.15fr_.85fr]">
-                <Card className="bg-card/50">
+                <Card className="bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <TrendingUp className="size-4 text-primary" />
@@ -875,7 +849,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     </div>
                   </CardContent>
                 </Card>
-                <Card className="bg-card/50">
+                <Card className="bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <Scale className="size-4 text-primary" />
@@ -912,7 +886,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                       ].map(([label, value]) => (
                         <div
                           key={label}
-                          className="rounded-lg border border-border bg-background/30 p-3"
+                          className="border border-border bg-background p-3"
                         >
                           <p className="font-mono text-lg">{value}</p>
                           <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
@@ -933,7 +907,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     <EvidenceCard key={evidence.id} evidence={evidence} />
                   ))}
                 </div>
-                <Card className="h-fit bg-card/50">
+                <Card className="h-fit bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <Radar className="size-4 text-primary" />
@@ -944,7 +918,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     {selected.transition_signals.map((signal) => (
                       <div
                         key={`${signal.type}-${signal.detail}`}
-                        className="rounded-xl border border-border bg-background/35 p-4"
+                        className="border border-border bg-background p-4"
                       >
                         <div className="flex items-center justify-between gap-3">
                           <p className="text-xs font-medium">{signal.label}</p>
@@ -973,7 +947,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   <Card
                     key={scenario.id}
                     className={cn(
-                      "bg-card/50",
+                      "bg-card",
                       scenario.id === "balanced" && "border-primary/25",
                     )}
                   >
@@ -984,7 +958,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                           className={
                             scenario.feasible
                               ? "bg-primary/10 text-primary"
-                              : "bg-amber-400/10 text-amber-300"
+                              : "border-foreground bg-foreground text-background"
                           }
                         >
                           {scenario.feasible ? "FEASIBLE" : "STRETCH"}
@@ -1012,7 +986,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                           </div>
                         ))}
                       </div>
-                      <div className="mt-4 flex items-end justify-between rounded-xl border border-primary/15 bg-primary/[0.045] p-4">
+                      <div className="mt-4 flex items-end justify-between border border-primary bg-background p-4">
                         <div>
                           <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
                             Estimated DSCR
@@ -1032,7 +1006,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   </Card>
                 ))}
               </div>
-              <p className="mt-4 flex gap-2 rounded-lg border border-amber-400/15 bg-amber-400/[0.04] p-3 text-[11px] leading-5 text-amber-100/65">
+              <p className="mt-4 flex gap-2 border border-primary bg-background p-3 text-[11px] leading-5 text-muted-foreground">
                 <CircleAlert className="mt-0.5 size-3.5 shrink-0" />
                 {campaign.financing_snapshot.disclaimer}
               </p>
@@ -1040,7 +1014,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
 
             <TabsContent value="seller" className="mt-5">
               <div className="grid gap-5 lg:grid-cols-[1.15fr_.85fr]">
-                <Card className="bg-card/50">
+                <Card className="bg-card">
                   <CardHeader className="flex-row items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <Mail className="size-4 text-primary" />
@@ -1051,7 +1025,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     />
                   </CardHeader>
                   <CardContent>
-                    <div className="rounded-xl border border-border bg-background/45 p-5">
+                    <div className="border border-border bg-background p-5">
                       <p className="border-b border-border pb-3 text-xs">
                         <span className="text-muted-foreground">Objet:</span>{" "}
                         {campaign.outreach_packet.email_subject}
@@ -1067,7 +1041,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   </CardContent>
                 </Card>
                 <div className="space-y-5">
-                  <Card className="bg-card/50">
+                  <Card className="bg-card">
                     <CardHeader className="flex-row items-center justify-between">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <Phone className="size-4 text-primary" />
@@ -1081,7 +1055,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                       </p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-card/50">
+                  <Card className="bg-card">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <MessageSquareText className="size-4 text-primary" />
@@ -1114,7 +1088,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
 
             <TabsContent value="documents" className="mt-5">
               <div className="grid gap-5 lg:grid-cols-[.78fr_1.22fr]">
-                <Card className="h-fit bg-card/50">
+                <Card className="h-fit bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
                       <FileCheck2 className="size-4 text-primary" />
@@ -1125,7 +1099,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                     {campaign.generated_artifacts.map((artifact) => (
                       <div
                         key={artifact.id}
-                        className="flex items-center justify-between rounded-lg border border-border bg-background/30 p-3"
+                        className="flex items-center justify-between border border-border bg-background p-3"
                       >
                         <div className="flex items-center gap-3">
                           <FileText className="size-4 text-primary" />
@@ -1142,7 +1116,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                   </CardContent>
                 </Card>
                 <div className="space-y-5">
-                  <Card className="bg-card/50">
+                  <Card className="bg-card">
                     <CardHeader className="flex-row items-center justify-between">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <Landmark className="size-4 text-primary" />
@@ -1175,7 +1149,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-card/50">
+                  <Card className="bg-card">
                     <CardHeader className="flex-row items-center justify-between">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <Scale className="size-4 text-primary" />
@@ -1184,12 +1158,12 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                       <CopyButton value={acquisitionCase.loi_draft} />
                     </CardHeader>
                     <CardContent>
-                      <p className="whitespace-pre-line rounded-xl border border-border bg-background/35 p-5 font-mono text-[11px] leading-6 text-muted-foreground">
+                      <p className="whitespace-pre-line border border-border bg-background p-5 font-mono text-[11px] leading-6 text-muted-foreground">
                         {acquisitionCase.loi_draft}
                       </p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-card/50">
+                  <Card className="bg-card">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <CalendarDays className="size-4 text-primary" />
@@ -1200,7 +1174,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                       {acquisitionCase.hundred_day_plan.map((phase) => (
                         <div
                           key={phase.phase}
-                          className="rounded-xl border border-border bg-background/35 p-4"
+                          className="border border-border bg-background p-4"
                         >
                           <Badge variant="outline">{phase.days}</Badge>
                           <p className="mt-3 text-sm font-medium">{phase.phase}</p>
@@ -1218,7 +1192,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
             </TabsContent>
 
             <TabsContent value="json" className="mt-5">
-              <Card className="overflow-hidden bg-[#090b0a]">
+              <Card className="overflow-hidden bg-background">
                 <CardHeader className="flex-row items-center justify-between border-b border-border">
                   <CardTitle className="flex items-center gap-2 text-sm">
                     <FileJson className="size-4 text-primary" />
@@ -1231,7 +1205,7 @@ export function CampaignDashboard({ campaign }: { campaign: CampaignOutput }) {
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="h-[560px]">
-                    <pre className="p-5 font-mono text-[11px] leading-5 text-[#b4c6b9]">
+                    <pre className="p-5 font-mono text-[11px] leading-5 text-muted-foreground">
                       {JSON.stringify(campaign, null, 2)}
                     </pre>
                   </ScrollArea>
